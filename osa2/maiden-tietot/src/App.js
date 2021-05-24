@@ -3,11 +3,9 @@ import axios from "axios";
 import Filter from "./components/Filter";
 import Countries from "./components/Countries";
 
-const api_key = process.env.REACT_APP_API_KEY;
-
 const App = () => {
-  const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState("");
+  const [countries, setCountries] = useState([]);
   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
@@ -24,6 +22,7 @@ const App = () => {
 
   useEffect(() => {
     if (countries.length === 1) {
+      const api_key = process.env.REACT_APP_API_KEY;
       const capital = countries[0].capital;
       axios
         .get(
