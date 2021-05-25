@@ -1,6 +1,6 @@
-import React from "react";
-import Country from "./Country";
-import SingleCountry from "./SingleCountry";
+import React from 'react';
+import Country from './Country';
+import SingleCountry from './SingleCountry';
 
 const Countries = ({ countries, filter, weatherData, handleCountryClick }) => {
   if (countries.length > 10) {

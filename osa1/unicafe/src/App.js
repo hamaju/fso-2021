@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
@@ -38,7 +38,7 @@ const App = () => {
   const all = good + neutral + bad;
   // conditional (ternary) operator
   const average = all ? (good * 1 + neutral * 0 + bad * -1) / all : 0;
-  const positive = all ? `${(good / all) * 100}%` : "0%";
+  const positive = all ? `${(good / all) * 100}%` : '0%';
 
   const handleGoodClick = () => {
     setGood(good + 1);

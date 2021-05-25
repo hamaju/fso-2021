@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react';
 
 const Weather = ({ weatherData }) => {
   return (
-    // doesn't work without optional chaining (?.) for some reason
+    // doesn't work without optional chaining (?.)
     <div>
+      <b>{weatherData?.name}</b>
       <div>temperature: {weatherData?.main.temp} °C</div>
       <div>feels like: {weatherData?.main.feels_like} °C</div>
       <div>wind: {weatherData?.wind.speed} m/s</div>

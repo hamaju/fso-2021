@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Input from "./components/Input";
-import Filter from "./components/Filter";
-import PersonForm from "./components/PersonForm";
-import Persons from "./components/Persons";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Input from './components/Input';
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState("");
-  const [newNumber, setNewNumber] = useState("");
-  const [filter, setFilter] = useState("");
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    axios.get("http://localhost:3001/persons").then((response) => {
+    axios.get('http://localhost:3001/persons').then((response) => {
       setPersons(response.data);
     });
   }, []);
@@ -30,8 +30,8 @@ const App = () => {
 
     if (!checkIfPersonExists) {
       setPersons(persons.concat(personObject));
-      setNewName("");
-      setNewNumber("");
+      setNewName('');
+      setNewNumber('');
     } else {
       window.alert(`${newName} is already added `);
     }
