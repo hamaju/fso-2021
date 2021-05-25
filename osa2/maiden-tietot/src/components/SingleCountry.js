@@ -1,13 +1,13 @@
 import React from "react";
 import Weather from "./Weather";
 
-const SingleCountry = ({ country, weather }) => {
+const SingleCountry = ({ country, weatherData }) => {
   return (
     <div>
       <h2>{country.name}</h2>
       <img src={country.flag} width={200} alt={country.name} />
       <div>capital: {country.capital}</div>
-      <div>population: {country.population}</div>
+      <div>population: {country.population.toLocaleString()}</div>
       <h3>Languages</h3>
       <ul>
         {country.languages.map((language) => (
@@ -15,7 +15,7 @@ const SingleCountry = ({ country, weather }) => {
         ))}
       </ul>
       <h3>Weather</h3>
-      <Weather weather={weather} />
+      <Weather weatherData={weatherData} />
     </div>
   );
 };

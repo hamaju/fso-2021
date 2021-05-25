@@ -6,7 +6,7 @@ import Countries from "./components/Countries";
 const App = () => {
   const [filter, setFilter] = useState("");
   const [countries, setCountries] = useState([]);
-  const [weather, setWeather] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {
     axios.get("https://restcountries.eu/rest/v2/all").then((response) => {
@@ -24,12 +24,13 @@ const App = () => {
     if (countries.length === 1) {
       const api_key = process.env.REACT_APP_API_KEY;
       const capital = countries[0].capital;
+
       axios
         .get(
-          `http://api.weatherstack.com/current?access_key=${api_key}&query=${capital}`
+          `http://api.openweathermap.org/data/2.5/weather?q=${capital}&units=metric&appid=${api_key}`
         )
-        .then((response) => {
-          setWeather(response.data);
+        .then((res) => {
+          setWeatherData(res.data);
         });
     }
   }, [countries]);
@@ -52,7 +53,7 @@ const App = () => {
       <Countries
         countries={countries}
         filter={filter}
-        weather={weather}
+        weatherData={weatherData}
         handleCountryClick={handleCountryClick}
       />
     </div>

@@ -1,14 +1,18 @@
 import React from "react";
 
-const Weather = ({ weather }) => {
+const Weather = ({ weatherData }) => {
   return (
+    // doesn't work without optional chaining (?.) for some reason
     <div>
-      <img src={weather?.current.weather_icons} alt="weather icon" />
-      <div>temperature: {weather?.current.temperature}°C</div>
-      <div>
-        wind: {weather?.current.wind_speed} mph direction {" "}
-        {weather?.current.wind_dir}
-      </div>
+      <div>temperature: {weatherData?.main.temp} °C</div>
+      <div>feels like: {weatherData?.main.feels_like} °C</div>
+      <div>wind: {weatherData?.wind.speed} m/s</div>
+      <div>humidity: {weatherData?.main.humidity}%</div>
+      <img
+        src={`http://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png`}
+        alt={weatherData?.weather[0].description}
+      />
+      <div>{weatherData?.weather[0].main}</div>
     </div>
   );
 };
