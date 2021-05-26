@@ -32,11 +32,11 @@ const App = () => {
       const { id } = person;
       const updatedPerson = { ...person, number: newNumber };
 
-      const confirmUpdate = window.confirm(
+      const confirmPersonUpdate = window.confirm(
         `${newName} already exists, replace the old number with a new one?`
       );
 
-      if (confirmUpdate) {
+      if (confirmPersonUpdate) {
         personService.update(id, updatedPerson).then(() => {
           personService
             .getAll()

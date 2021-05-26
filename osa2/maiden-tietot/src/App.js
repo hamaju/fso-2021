@@ -35,8 +35,8 @@ const App = () => {
     }
   }, [countries]);
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value.toLowerCase());
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value.toLowerCase());
   };
 
   const handleCountryClick = (countryToShow) => {
