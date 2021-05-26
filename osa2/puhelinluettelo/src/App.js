@@ -4,6 +4,7 @@ import Input from './components/Input';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 import personService from './services/persons';
 
 const App = () => {
@@ -11,6 +12,13 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [message, setMessage] = useState(null);
+
+  const clearNotification = () => {
+    setTimeout(() => {
+      setMessage(null);
+    }, 3000);
+  };
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -37,11 +45,21 @@ const App = () => {
       );
 
       if (confirmPersonUpdate) {
-        personService.update(id, updatedPerson).then(() => {
-          personService
-            .getAll()
-            .then((updatedPersons) => setPersons(updatedPersons));
-        });
+        personService
+          .update(id, updatedPerson)
+          .then(() => {
+            personService
+              .getAll()
+              .then((updatedPersons) => setPersons(updatedPersons));
+          })
+          .catch((err) => {
+            setMessage([
+              `Information of ${person.name} has already been removed from the server`,
+              'error',
+            ]);
+            clearNotification();
+            setPersons(persons.filter((person) => person.id !== id));
+          });
 
         setNewName('');
         setNewNumber('');
@@ -49,6 +67,8 @@ const App = () => {
     } else {
       personService.create(newPerson).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
+        setMessage([`Added ${newPerson.name}`, 'primary']);
+        clearNotification();
         setNewName('');
         setNewNumber('');
       });
@@ -77,6 +97,9 @@ const App = () => {
           .getAll()
           .then((updatedPersons) => setPersons(updatedPersons));
       });
+
+      setMessage([`Removed ${person.name}`, 'primary']);
+      clearNotification();
       setFilter('');
     }
   };
@@ -84,6 +107,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={message} />
       <Filter
         name="filter shown with"
         filter={filter}
