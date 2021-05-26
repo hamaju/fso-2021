@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
 import Input from './components/Input';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,41 +13,72 @@ const App = () => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then((response) => {
-      setPersons(response.data);
+    personService.getAll().then((initialPersons) => {
+      setPersons(initialPersons);
     });
   }, []);
 
-  const addPerson = (event) => {
-    event.preventDefault();
-    const personObject = {
+  const addPerson = (e) => {
+    e.preventDefault();
+    const newPerson = {
       name: newName,
       number: newNumber,
     };
 
-    const checkIfPersonExists = persons.some(
-      (person) => person.name === newName
-    );
+    const personExists = persons.some((person) => person.name === newName);
 
-    if (!checkIfPersonExists) {
-      setPersons(persons.concat(personObject));
-      setNewName('');
-      setNewNumber('');
+    if (personExists) {
+      const person = persons.find((person) => person.name === newName);
+      const { id } = person;
+      const updatedPerson = { ...person, number: newNumber };
+
+      const confirmUpdate = window.confirm(
+        `${newName} already exists, replace the old number with a new one?`
+      );
+
+      if (confirmUpdate) {
+        personService.update(id, updatedPerson).then(() => {
+          personService
+            .getAll()
+            .then((updatedPersons) => setPersons(updatedPersons));
+        });
+
+        setNewName('');
+        setNewNumber('');
+      }
     } else {
-      window.alert(`${newName} is already added `);
+      personService.create(newPerson).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNewName('');
+        setNewNumber('');
+      });
     }
   };
 
-  const handleNameChange = (event) => {
-    setNewName(event.target.value);
+  const handleNameChange = (e) => {
+    setNewName(e.target.value);
   };
 
-  const handleNumberChange = (event) => {
-    setNewNumber(event.target.value);
+  const handleNumberChange = (e) => {
+    setNewNumber(e.target.value);
   };
 
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value.toLowerCase());
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value.toLowerCase());
+  };
+
+  const handlePersonDelete = (id) => {
+    const person = persons.find((person) => person.id === id);
+    const confirmRemoval = window.confirm(`Delete ${person.name}?`);
+
+    if (confirmRemoval) {
+      personService.remove(id).then(() => {
+        personService
+          .getAll()
+          .then((updatedPersons) => setPersons(updatedPersons));
+      });
+      setFilter('');
+    }
   };
 
   return (
@@ -62,7 +94,11 @@ const App = () => {
       <Input name="number" value={newNumber} onChange={handleNumberChange} />
       <PersonForm onSubmit={addPerson} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons
+        persons={persons}
+        filter={filter}
+        handlePersonDelete={handlePersonDelete}
+      />
     </div>
   );
 };
