@@ -41,6 +41,13 @@ const App = () => {
       const { id } = person;
       const updatedPerson = { ...person, number: newNumber };
 
+      // backend already does validation but without checking for number
+      // length here updating still works with numbers less than 8 chars
+      if (newNumber.length < 8) {
+        notify('Number needs to be at least 8 characters', 'error');
+        return;
+      }
+
       const confirmPersonUpdate = window.confirm(
         `${newName} already exists, replace the old number with a new one?`
       );
@@ -67,8 +74,8 @@ const App = () => {
     } else {
       personService
         .create(newPerson)
-        .then((createdPerson) => {
-          setPersons(persons.concat(createdPerson));
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
           notify(`Added ${newPerson.name}`);
           setNewName('');
           setNewNumber('');
