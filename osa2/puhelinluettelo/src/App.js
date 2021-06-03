@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import Input from './components/Input';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
@@ -27,8 +26,9 @@ const App = () => {
     }, 3000);
   };
 
-  const addPerson = (e) => {
-    e.preventDefault();
+  const addPerson = (event) => {
+    event.preventDefault();
+    
     const newPerson = {
       name: newName,
       number: newNumber,
@@ -74,16 +74,16 @@ const App = () => {
     }
   };
 
-  const handleNameChange = (e) => {
-    setNewName(e.target.value);
+  const handleNameChange = (event) => {
+    setNewName(event.target.value);
   };
 
-  const handleNumberChange = (e) => {
-    setNewNumber(e.target.value);
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value);
   };
 
-  const handleFilterChange = (e) => {
-    setFilter(e.target.value.toLowerCase());
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value.toLowerCase());
   };
 
   const handlePersonDelete = (id) => {
