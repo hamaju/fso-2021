@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Input = ({ name, value, onChange }) => {
+const Input = ({ label, value, onChange }) => {
   return (
     <div>
-      {name} <input value={value} onChange={onChange} />
+      <label>{label}</label> <input value={value} onChange={onChange} />
     </div>
   );
 };

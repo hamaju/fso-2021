@@ -107,13 +107,13 @@ const App = () => {
       <h1>Phonebook</h1>
       <Notification notification={notification} />
       <Filter
-        name="filter shown with"
+        label="filter shown with"
         filter={filter}
         handleFilterChange={handleFilterChange}
       />
       <h2>Add new</h2>
-      <Input name="name" value={newName} onChange={handleNameChange} />
-      <Input name="number" value={newNumber} onChange={handleNumberChange} />
+      <Input label="name" value={newName} onChange={handleNameChange} />
+      <Input label="number" value={newNumber} onChange={handleNumberChange} />
       <PersonForm onSubmit={addPerson} />
       <h2>Numbers</h2>
       <Persons

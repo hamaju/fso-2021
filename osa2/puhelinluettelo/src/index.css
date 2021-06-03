@@ -42,3 +42,8 @@ code {
   background-color: #f8d7da;
   border-color: #f5c2c7;
 }
+
+label {
+  display: inline-block;
+  width: 60px;
+}

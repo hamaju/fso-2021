@@ -1,9 +1,9 @@
 import React from 'react';
 
-const Filter = ({ name, filter, handleFilterChange }) => {
+const Filter = ({ label, filter, handleFilterChange }) => {
   return (
     <div>
-      {name} <input type="text" value={filter} onChange={handleFilterChange} />
+      {label} <input type="text" value={filter} onChange={handleFilterChange} />
     </div>
   );
 };
