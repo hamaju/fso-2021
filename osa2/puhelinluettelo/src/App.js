@@ -23,12 +23,12 @@ const App = () => {
     setNotification({ message, type });
     setTimeout(() => {
       setNotification(null);
-    }, 3000);
+    }, 5000);
   };
 
   const addPerson = (event) => {
     event.preventDefault();
-    
+
     const newPerson = {
       name: newName,
       number: newNumber,
@@ -65,12 +65,17 @@ const App = () => {
         setNewNumber('');
       }
     } else {
-      personService.create(newPerson).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        notify(`Added ${newPerson.name}`);
-        setNewName('');
-        setNewNumber('');
-      });
+      personService
+        .create(newPerson)
+        .then((createdPerson) => {
+          setPersons(persons.concat(createdPerson));
+          notify(`Added ${newPerson.name}`);
+          setNewName('');
+          setNewNumber('');
+        })
+        .catch((err) => {
+          notify(err.response.data.error, 'error');
+        });
     }
   };
 
