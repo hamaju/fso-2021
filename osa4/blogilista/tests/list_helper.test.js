@@ -97,4 +97,12 @@ describe('most liked', () => {
       likes: 12,
     });
   });
+
+  test('author with the most blogs is shown correctly', () => {
+    const result = listHelper.mostBlogs(blogs);
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3,
+    });
+  });
 });
