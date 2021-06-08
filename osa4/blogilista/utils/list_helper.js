@@ -25,9 +25,9 @@ const favoriteBlog = (blogs) => {
 const mostBlogs = (blogs) => {
   // convert the array to a map where each key is the author and
   // each value the accumulated sum of occurrences for that author
-  // after that convert the map back into an array and map the key/value
-  // pairs into objects
-  const result = Array.from(
+  // after that convert the map back into an array and map the
+  // key/value pairs into objects
+  const blogsByAuthor = Array.from(
     blogs.reduce(
       (m, blog) => m.set(blog.author, (m.get(blog.author) || 0) + 1),
       new Map()
@@ -37,15 +37,13 @@ const mostBlogs = (blogs) => {
   );
 
   // find the author with the most blogs
-  const mostBlogsObj = result.reduce((prev, current) =>
+  return blogsByAuthor.reduce((prev, current) =>
     prev.blogs > current.blogs ? prev : current
   );
-
-  return mostBlogsObj;
 };
 
 const mostLikes = (blogs) => {
-  const result = Array.from(
+  const likesByAuthor = Array.from(
     blogs.reduce(
       (m, { author, likes }) => m.set(author, (m.get(author) || 0) + likes),
       new Map()
@@ -53,11 +51,9 @@ const mostLikes = (blogs) => {
     ([author, likes]) => ({ author, likes })
   );
 
-  const mostLikesObj = result.reduce((prev, current) =>
+  return likesByAuthor.reduce((prev, current) =>
     prev.likes > current.likes ? prev : current
   );
-
-  return mostLikesObj;
 };
 
 module.exports = {
