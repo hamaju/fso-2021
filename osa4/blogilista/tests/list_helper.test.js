@@ -63,8 +63,6 @@ const blogs = [
 ];
 
 test('dummy returns one', () => {
-  const blogs = [];
-
   const result = listHelper.dummy(blogs);
   expect(result).toBe(1);
 });
@@ -103,6 +101,14 @@ describe('most liked', () => {
     expect(result).toEqual({
       author: 'Robert C. Martin',
       blogs: 3,
+    });
+  });
+
+  test('author with the most likes is shown correctly', () => {
+    const result = listHelper.mostLikes(blogs);
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
     });
   });
 });

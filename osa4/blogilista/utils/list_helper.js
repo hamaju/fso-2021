@@ -1,5 +1,4 @@
-const _ = require('lodash');
-
+// eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => 1;
 
 const totalLikes = (blogs) => {
@@ -26,25 +25,39 @@ const favoriteBlog = (blogs) => {
 const mostBlogs = (blogs) => {
   // convert the array to a map where each key is the author and
   // each value the accumulated sum of occurrences for that author
-  const totalBlogsByAuthor = blogs.reduce(
-    (acc, blog) => acc.set(blog.author, (acc.get(blog.author) || 0) + 1),
-    new Map()
-  );
-
-  const results = [];
-
-  // entries() returns an array of arrays with all the key/value pairs;
-  // construct objects in the desired format with them
-  [...totalBlogsByAuthor.entries()].forEach((e) =>
-    results.push({ author: e[0], blogs: e[1] })
+  // after that convert the map back into an array and map the key/value
+  // pairs into objects
+  const result = Array.from(
+    blogs.reduce(
+      (m, blog) => m.set(blog.author, (m.get(blog.author) || 0) + 1),
+      new Map()
+    ),
+    // eslint-disable-next-line no-shadow
+    ([author, blogs]) => ({ author, blogs })
   );
 
   // find the author with the most blogs
-  const mostBlogsObj = results.reduce((prev, current) =>
+  const mostBlogsObj = result.reduce((prev, current) =>
     prev.blogs > current.blogs ? prev : current
   );
 
   return mostBlogsObj;
+};
+
+const mostLikes = (blogs) => {
+  const result = Array.from(
+    blogs.reduce(
+      (m, { author, likes }) => m.set(author, (m.get(author) || 0) + likes),
+      new Map()
+    ),
+    ([author, likes]) => ({ author, likes })
+  );
+
+  const mostLikesObj = result.reduce((prev, current) =>
+    prev.likes > current.likes ? prev : current
+  );
+
+  return mostLikesObj;
 };
 
 module.exports = {
@@ -52,4 +65,5 @@ module.exports = {
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 };
