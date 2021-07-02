@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
+const bcrypt = require('bcrypt');
 const helper = require('./test_helper');
 const app = require('../app');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const api = supertest(app);
 
-beforeEach(async () => {
-  await Blog.deleteMany({});
-  await Blog.insertMany(helper.initialBlogs);
-});
-
 describe('when there is some initial blogs saved', () => {
+  beforeEach(async () => {
+    await Blog.deleteMany({});
+    await Blog.insertMany(helper.initialBlogs);
+  });
+
   test('correct number of blogs are returned as json', async () => {
     const res = await api.get('/api/blogs');
 
@@ -58,44 +60,98 @@ describe('when there is some initial blogs saved', () => {
 
     expect(blogsAtEnd[0].likes).toBe(999);
   });
+
+  describe('adding a new blog', () => {
+    test('increases the number of blogs by one', async () => {
+      const newBlog = {
+        title: 'test blog',
+        author: 'tester',
+        url: 'example.com',
+        likes: 3,
+      };
+
+      await api.post('/api/blogs').send(newBlog);
+
+      const blogsAtEnd = await helper.blogsInDb();
+
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+    });
+
+    test('without likes sets its likes to 0', async () => {
+      const blogWithNoLikes = {
+        title: 'test blog',
+        author: 'tester',
+        url: 'example.com',
+      };
+
+      await api.post('/api/blogs').send(blogWithNoLikes);
+
+      const blogsAtEnd = await helper.blogsInDb();
+
+      expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0);
+    });
+
+    test('fails with status code 400 if data is invalid', async () => {
+      const malformattedBlog = {
+        author: 'a',
+      };
+
+      await api.post('/api/blogs').send(malformattedBlog).expect(400);
+    });
+  });
 });
 
-describe('adding a new blog', () => {
-  test('increases the number of blogs by one', async () => {
-    const newBlog = {
-      title: 'test blog',
-      author: 'tester',
-      url: 'example.com',
-      likes: 3,
-    };
+describe('when there is initially one user at db', () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
 
-    await api.post('/api/blogs').send(newBlog);
+    const passwordHash = await bcrypt.hash('sekret', 10);
+    const user = new User({ username: 'root', passwordHash });
 
-    const blogsAtEnd = await helper.blogsInDb();
-
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+    await user.save();
   });
 
-  test('without likes sets its likes to 0', async () => {
-    const blogWithNoLikes = {
-      title: 'test blog',
-      author: 'tester',
-      url: 'example.com',
+  test('creation succeeds with a fresh username', async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: 'mluukkai',
+      name: 'Matti Luukkainen',
+      password: 'salainen',
     };
 
-    await api.post('/api/blogs').send(blogWithNoLikes);
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
 
-    const blogsAtEnd = await helper.blogsInDb();
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
 
-    expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0);
+    const usernames = usersAtEnd.map((u) => u.username);
+    expect(usernames).toContain(newUser.username);
   });
 
-  test('fails with status code 400 if data is invalid', async () => {
-    const malformattedBlog = {
-      author: 'a',
+  test('creation fails with proper status code and message if username already taken', async () => {
+    const usersAtStart = await helper.usersInDb();
+
+    const newUser = {
+      username: 'root',
+      name: 'superuser',
+      password: '1234',
     };
 
-    await api.post('/api/blogs').send(malformattedBlog).expect(400);
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(result.body.error).toContain('`username` to be unique');
+
+    const usersAtEnd = await helper.usersInDb();
+    expect(usersAtEnd).toHaveLength(usersAtStart.length);
   });
 });
 
