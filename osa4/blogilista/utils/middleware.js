@@ -8,31 +8,49 @@ const requestLogger = (request, response, next) => {
   next();
 };
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' });
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' });
 };
 
 // eslint-disable-next-line consistent-return
-const errorHandler = (error, request, response, next) => {
-  logger.error(error.message);
+const errorHandler = (err, req, res, next) => {
+  logger.error(err.message);
 
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' });
+  if (err.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' });
   }
-  if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message });
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({ error: err.message });
   }
-  if (error.name === 'JsonWebTokenError') {
-    return response.status(401).json({
+  if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({
       error: 'invalid token',
     });
   }
+  if (err.name === 'TokenExpiredError') {
+    return res.status(401).json({
+      error: 'token expired',
+    });
+  }
 
-  next(error);
+  next(err);
+};
+
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    req.token = authorization.substring(7);
+  } else {
+    req.token = null;
+  }
+
+  next();
+  return req.token;
 };
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
+  tokenExtractor,
 };

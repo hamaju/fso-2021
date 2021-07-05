@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 const blogsRouter = require('express').Router();
+const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
@@ -12,11 +13,15 @@ blogsRouter.get('/', async (req, res) => {
   res.json(blogs.map((blog) => blog.toJSON()));
 });
 
+// eslint-disable-next-line consistent-return
 blogsRouter.post('/', async (req, res) => {
   const { body } = req;
 
-  const users = await User.find({});
-  const user = users[0];
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+  if (!req.token || !decodedToken.id) {
+    return res.status(401).json({ error: 'token missing or invalid' });
+  }
+  const user = await User.findById(decodedToken.id);
 
   if (!body.title && !body.url) {
     res.send(400);
