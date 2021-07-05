@@ -98,7 +98,7 @@ describe('most liked', () => {
 });
 
 describe('author with', () => {
-  test('the most blogs is returned right', () => {
+  test('the most blogs is returned correctly', () => {
     const result = listHelper.mostBlogs(blogs);
     expect(result).toEqual({
       author: 'Robert C. Martin',

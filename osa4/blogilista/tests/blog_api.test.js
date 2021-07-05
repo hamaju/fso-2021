@@ -8,15 +8,26 @@ const User = require('../models/user');
 
 const api = supertest(app);
 
+beforeAll(async () => {
+  await User.deleteMany({});
+
+  const testUser = {
+    username: 'tester',
+    name: 'testestest',
+    password: 'password',
+  };
+
+  await api.post('/api/users').send(testUser);
+});
+
 describe('when there is some initial blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({});
     await Blog.insertMany(helper.initialBlogs);
   });
 
-  test('correct number of blogs are returned as json', async () => {
+  test('the correct number of blogs is returned as json', async () => {
     const res = await api.get('/api/blogs');
-
     expect(res.body).toHaveLength(helper.initialBlogs.length);
 
     await api
@@ -28,22 +39,44 @@ describe('when there is some initial blogs saved', () => {
   test('blogs are returned with the field id', async () => {
     const res = await api.get('/api/blogs');
     const ids = res.body.map((r) => r.id);
-
     expect(ids).toBeDefined();
   });
 
-  test('deletion of a blog succeeds', async () => {
-    const blogsAtStart = await helper.blogsInDb();
-    const blogToDelete = blogsAtStart[0];
+  test('deletion of a blog succeeds if the requesting user is the same as the creator', async () => {
+    const user = {
+      username: 'tester',
+      password: 'password',
+    };
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    const login = await api.post('/api/login').send(user);
+    const { token } = login.body;
+
+    const newBlog = {
+      title: 'blog to delete',
+      author: 'tester',
+      url: 'example.com',
+      likes: 3,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[blogsAtStart.length - 1];
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
+      .expect(204);
 
     const blogsAtEnd = await helper.blogsInDb();
-
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1);
 
     const titles = blogsAtEnd.map((r) => r.title);
-
     expect(titles).not.toContain(blogToDelete.title);
   });
 
@@ -57,12 +90,16 @@ describe('when there is some initial blogs saved', () => {
       .expect(200);
 
     const blogsAtEnd = await helper.blogsInDb();
-
     expect(blogsAtEnd[0].likes).toBe(999);
   });
 
   describe('adding a new blog', () => {
-    test('increases the number of blogs by one', async () => {
+    const user = {
+      username: 'tester',
+      password: 'password',
+    };
+
+    test('succeeds if the blog is valid', async () => {
       const newBlog = {
         title: 'test blog',
         author: 'tester',
@@ -70,11 +107,21 @@ describe('when there is some initial blogs saved', () => {
         likes: 3,
       };
 
-      await api.post('/api/blogs').send(newBlog);
+      const login = await api.post('/api/login').send(user);
+      const { token } = login.body;
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .set('Authorization', `bearer ${token}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
 
       const blogsAtEnd = await helper.blogsInDb();
-
       expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+
+      const titles = blogsAtEnd.map((r) => r.title);
+      expect(titles).toContain(newBlog.title);
     });
 
     test('without likes sets its likes to 0', async () => {
@@ -84,10 +131,17 @@ describe('when there is some initial blogs saved', () => {
         url: 'example.com',
       };
 
-      await api.post('/api/blogs').send(blogWithNoLikes);
+      const login = await api.post('/api/login').send(user);
+      const { token } = login.body;
+
+      await api
+        .post('/api/blogs')
+        .send(blogWithNoLikes)
+        .set('Authorization', `bearer ${token}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
 
       const blogsAtEnd = await helper.blogsInDb();
-
       expect(blogsAtEnd[helper.initialBlogs.length].likes).toBe(0);
     });
 
@@ -96,7 +150,37 @@ describe('when there is some initial blogs saved', () => {
         author: 'a',
       };
 
-      await api.post('/api/blogs').send(malformattedBlog).expect(400);
+      const login = await api.post('/api/login').send(user);
+      const { token } = login.body;
+
+      await api
+        .post('/api/blogs')
+        .send(malformattedBlog)
+        .set('Authorization', `bearer ${token}`)
+        .expect(400);
+    });
+
+    test('fails and returns status code 401 if request does not have a token', async () => {
+      const newBlog = {
+        title: 'no token',
+        author: 'tester',
+        url: 'example.com',
+        likes: 6,
+      };
+
+      const token = null;
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .set('Authorization', `bearer ${token}`)
+        .expect(401);
+
+      const blogsAtEnd = await helper.blogsInDb();
+      expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length);
+
+      const titles = blogsAtEnd.map((r) => r.title);
+      expect(titles).not.toContain(newBlog.title);
     });
   });
 });
@@ -105,7 +189,7 @@ describe('when there is initially one user at db', () => {
   beforeEach(async () => {
     await User.deleteMany({});
 
-    const passwordHash = await bcrypt.hash('sekret', 10);
+    const passwordHash = await bcrypt.hash('password', 10);
     const user = new User({ username: 'root', passwordHash });
 
     await user.save();
@@ -127,11 +211,9 @@ describe('when there is initially one user at db', () => {
       .expect('Content-Type', /application\/json/);
 
     const usersAtEnd = await helper.usersInDb();
-
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1);
 
     const usernames = usersAtEnd.map((u) => u.username);
-    
     expect(usernames).toContain(newUser.username);
   });
 
@@ -141,7 +223,7 @@ describe('when there is initially one user at db', () => {
     const newUser = {
       username: 'root',
       name: 'superuser',
-      password: '1234',
+      password: 'password',
     };
 
     const result = await api
@@ -153,7 +235,6 @@ describe('when there is initially one user at db', () => {
     expect(result.body.error).toContain('`username` to be unique');
 
     const usersAtEnd = await helper.usersInDb();
-
     expect(usersAtEnd).toHaveLength(usersAtStart.length);
   });
 });
