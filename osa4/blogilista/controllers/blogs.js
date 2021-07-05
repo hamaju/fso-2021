@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 const blogsRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
@@ -13,7 +14,6 @@ blogsRouter.get('/', async (req, res) => {
   res.json(blogs.map((blog) => blog.toJSON()));
 });
 
-// eslint-disable-next-line consistent-return
 blogsRouter.post('/', async (req, res) => {
   const { body } = req;
 
@@ -24,7 +24,7 @@ blogsRouter.post('/', async (req, res) => {
   const user = await User.findById(decodedToken.id);
 
   if (!body.title && !body.url) {
-    res.send(400);
+    res.sendStatus(400);
   }
 
   if (!body.likes) {
@@ -47,8 +47,19 @@ blogsRouter.post('/', async (req, res) => {
 });
 
 blogsRouter.delete('/:id', async (req, res) => {
-  await Blog.findByIdAndRemove(req.params.id);
-  res.status(204).end();
+  const decodedToken = jwt.verify(req.token, process.env.SECRET);
+  if (!req.token || !decodedToken.id) {
+    return res.status(401).json({ error: 'token missing or invalid' });
+  }
+  const user = await User.findById(decodedToken.id);
+  const blog = await Blog.findById(req.params.id);
+
+  if (blog.user.toString() === user.id.toString()) {
+    await Blog.findByIdAndRemove(req.params.id);
+    return res.status(204).end();
+  }
+
+  res.sendStatus(401);
 });
 
 blogsRouter.put('/:id', async (req, res) => {

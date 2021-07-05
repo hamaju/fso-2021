@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvdmVsYWNlIiwiaWQiOiI2MGUzMmMyZGIyNDAwZjMwZDMwYThjMGEiLCJpYXQiOjE2MjU1MDI2NDUsImV4cCI6MTYyNTUwNjI0NX0.Cswwm9P96iPC_SpOSVyw5kUSeWIilEiAZ-Al01RCJpI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvdmVsYWNlIiwiaWQiOiI2MGUzMmMyZGIyNDAwZjMwZDMwYThjMGEiLCJpYXQiOjE2MjU1MDcwNDUsImV4cCI6MTYyNTUxMDY0NX0.pazes1pfpVj93krFfxIJ00vlwlIQYG5WcGNUhEdgCQw
 
 {
   "title": "MongoDB is web scale",
