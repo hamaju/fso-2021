@@ -94,17 +94,17 @@ describe('when there is some initial blogs saved', () => {
   });
 
   describe('adding a new blog', () => {
-    const user = {
-      username: 'tester',
-      password: 'password',
-    };
-
     test('succeeds if the blog is valid', async () => {
       const newBlog = {
         title: 'test blog',
         author: 'tester',
         url: 'example.com',
         likes: 3,
+      };
+
+      const user = {
+        username: 'tester',
+        password: 'password',
       };
 
       const login = await api.post('/api/login').send(user);
@@ -126,9 +126,14 @@ describe('when there is some initial blogs saved', () => {
 
     test('without likes sets its likes to 0', async () => {
       const blogWithNoLikes = {
-        title: 'test blog',
+        title: 'no likes',
         author: 'tester',
         url: 'example.com',
+      };
+
+      const user = {
+        username: 'tester',
+        password: 'password',
       };
 
       const login = await api.post('/api/login').send(user);
@@ -147,7 +152,12 @@ describe('when there is some initial blogs saved', () => {
 
     test('fails with status code 400 if data is invalid', async () => {
       const malformattedBlog = {
-        author: 'a',
+        author: 'tester',
+      };
+
+      const user = {
+        username: 'tester',
+        password: 'password',
       };
 
       const login = await api.post('/api/login').send(user);
