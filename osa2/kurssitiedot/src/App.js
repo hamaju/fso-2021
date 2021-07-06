@@ -1,8 +1,8 @@
-import React from 'react';
-import Course from './components/Course';
+import React from 'react'
+import Course from './components/Course'
 
 const App = () => {
-  const title = 'Web development curriculum';
+  const title = 'Web development curriculum'
   const courses = [
     {
       name: 'Half Stack application development',
@@ -46,7 +46,7 @@ const App = () => {
         },
       ],
     },
-  ];
+  ]
 
   return (
     <div>
@@ -55,7 +55,7 @@ const App = () => {
         <Course key={course.id} course={course} />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

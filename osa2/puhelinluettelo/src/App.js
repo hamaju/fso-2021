@@ -1,56 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import Input from './components/Input';
-import Filter from './components/Filter';
-import PersonForm from './components/PersonForm';
-import Persons from './components/Persons';
-import Notification from './components/Notification';
-import personService from './services/persons';
+import React, { useState, useEffect } from 'react'
+import Input from './components/Input'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+import Notification from './components/Notification'
+import personService from './services/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState('');
-  const [newNumber, setNewNumber] = useState('');
-  const [filter, setFilter] = useState('');
-  const [notification, setNotification] = useState(null);
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
-      setPersons(initialPersons);
-    });
-  }, []);
+      setPersons(initialPersons)
+    })
+  }, [])
 
   const notify = (message, type = 'primary') => {
-    setNotification({ message, type });
+    setNotification({ message, type })
     setTimeout(() => {
-      setNotification(null);
-    }, 5000);
-  };
+      setNotification(null)
+    }, 5000)
+  }
 
   const addPerson = (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     const newPerson = {
       name: newName,
       number: newNumber,
-    };
+    }
 
-    const personExists = persons.some((person) => person.name === newName);
+    const personExists = persons.some((person) => person.name === newName)
 
     if (personExists) {
-      const person = persons.find((person) => person.name === newName);
-      const { id } = person;
-      const updatedPerson = { ...person, number: newNumber };
+      const person = persons.find((person) => person.name === newName)
+      const { id } = person
+      const updatedPerson = { ...person, number: newNumber }
 
       // backend already does validation but without checking for number
       // length here updating still works with numbers less than 8 chars
       if (newNumber.length < 8) {
-        notify('Number needs to be at least 8 characters', 'error');
-        return;
+        notify('Number needs to be at least 8 characters', 'error')
+        return
       }
 
       const confirmPersonUpdate = window.confirm(
         `${newName} already exists, replace the old number with a new one?`
-      );
+      )
 
       if (confirmPersonUpdate) {
         personService
@@ -58,61 +58,61 @@ const App = () => {
           .then(() => {
             personService
               .getAll()
-              .then((updatedPersons) => setPersons(updatedPersons));
+              .then((updatedPersons) => setPersons(updatedPersons))
           })
           .catch(() => {
             notify(
               `Information of ${person.name} has already been removed from the server`,
               'error'
-            );
-            setPersons(persons.filter((person) => person.id !== id));
-          });
+            )
+            setPersons(persons.filter((person) => person.id !== id))
+          })
 
-        setNewName('');
-        setNewNumber('');
+        setNewName('')
+        setNewNumber('')
       }
     } else {
       personService
         .create(newPerson)
         .then((returnedPerson) => {
-          setPersons(persons.concat(returnedPerson));
-          notify(`Added ${newPerson.name}`);
-          setNewName('');
-          setNewNumber('');
+          setPersons(persons.concat(returnedPerson))
+          notify(`Added ${newPerson.name}`)
+          setNewName('')
+          setNewNumber('')
         })
         .catch((err) => {
-          notify(err.response.data.error, 'error');
-        });
+          notify(err.response.data.error, 'error')
+        })
     }
-  };
+  }
 
   const handleNameChange = (event) => {
-    setNewName(event.target.value);
-  };
+    setNewName(event.target.value)
+  }
 
   const handleNumberChange = (event) => {
-    setNewNumber(event.target.value);
-  };
+    setNewNumber(event.target.value)
+  }
 
   const handleFilterChange = (event) => {
-    setFilter(event.target.value.toLowerCase());
-  };
+    setFilter(event.target.value.toLowerCase())
+  }
 
   const handlePersonDelete = (id) => {
-    const person = persons.find((person) => person.id === id);
-    const confirmRemoval = window.confirm(`Delete ${person.name}?`);
+    const person = persons.find((person) => person.id === id)
+    const confirmRemoval = window.confirm(`Delete ${person.name}?`)
 
     if (confirmRemoval) {
       personService.remove(id).then(() => {
         personService
           .getAll()
-          .then((updatedPersons) => setPersons(updatedPersons));
-      });
+          .then((updatedPersons) => setPersons(updatedPersons))
+      })
 
-      notify(`Removed ${person.name}`);
-      setFilter('');
+      notify(`Removed ${person.name}`)
+      setFilter('')
     }
-  };
+  }
 
   return (
     <div>
@@ -134,7 +134,7 @@ const App = () => {
         handlePersonDelete={handlePersonDelete}
       />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App

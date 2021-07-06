@@ -1,10 +1,10 @@
-import React from 'react';
-import Country from './Country';
-import SingleCountry from './SingleCountry';
+import React from 'react'
+import Country from './Country'
+import SingleCountry from './SingleCountry'
 
 const Countries = ({ countries, filter, weatherData, handleCountryClick }) => {
   if (countries.length > 10) {
-    return <div>too many matches, narrow your search</div>;
+    return <div>too many matches, narrow your search</div>
   } else if (countries.length > 1 && countries.length < 10) {
     return (
       <div>
@@ -18,7 +18,7 @@ const Countries = ({ countries, filter, weatherData, handleCountryClick }) => {
             />
           ))}
       </div>
-    );
+    )
   } else if (countries.length === 1) {
     return (
       <div>
@@ -32,10 +32,10 @@ const Countries = ({ countries, filter, weatherData, handleCountryClick }) => {
             />
           ))}
       </div>
-    );
+    )
   } else {
-    return <div></div>;
+    return <div></div>
   }
-};
+}
 
-export default Countries;
+export default Countries

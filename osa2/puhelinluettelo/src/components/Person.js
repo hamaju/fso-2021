@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Person = ({ person, handlePersonDelete }) => {
   return (
@@ -6,7 +6,7 @@ const Person = ({ person, handlePersonDelete }) => {
       {person.name} {person.number}{' '}
       <button onClick={() => handlePersonDelete(person.id)}>del</button>
     </li>
-  );
-};
+  )
+}
 
-export default Person;
+export default Person

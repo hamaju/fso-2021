@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 
 const Header = ({ course }) => {
-  return <h2>{course.name}</h2>;
-};
+  return <h2>{course.name}</h2>
+}
 
 const Part = ({ name, exercises }) => {
   return (
     <p>
       {name} {exercises}
     </p>
-  );
-};
+  )
+}
 
 const Content = ({ course }) => {
   return (
@@ -19,18 +19,18 @@ const Content = ({ course }) => {
         <Part key={id} name={name} exercises={exercises} />
       ))}
     </div>
-  );
-};
+  )
+}
 
 const Total = ({ course }) => {
-  let total = course.parts.reduce((sum, currVal) => sum + currVal.exercises, 0);
+  let total = course.parts.reduce((sum, currVal) => sum + currVal.exercises, 0)
 
   return (
     <p>
       <b>total of {total} exercises</b>
     </p>
-  );
-};
+  )
+}
 
 const Course = ({ course }) => {
   return (
@@ -39,7 +39,7 @@ const Course = ({ course }) => {
       <Content course={course} />
       <Total course={course} />
     </div>
-  );
-};
+  )
+}
 
-export default Course;
+export default Course

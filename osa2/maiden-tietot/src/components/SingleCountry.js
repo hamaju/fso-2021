@@ -1,5 +1,5 @@
-import React from 'react';
-import Weather from './Weather';
+import React from 'react'
+import Weather from './Weather'
 
 const SingleCountry = ({ country, weatherData }) => {
   return (
@@ -17,7 +17,7 @@ const SingleCountry = ({ country, weatherData }) => {
       <h3>Weather</h3>
       <Weather weatherData={weatherData} />
     </div>
-  );
-};
+  )
+}
 
-export default SingleCountry;
+export default SingleCountry

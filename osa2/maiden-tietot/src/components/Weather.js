@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Weather = ({ weatherData }) => {
   return (
@@ -15,7 +15,7 @@ const Weather = ({ weatherData }) => {
       />
       <div>{weatherData?.weather[0].main}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Weather;
+export default Weather

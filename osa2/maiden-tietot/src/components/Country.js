@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 const Country = ({ country, handleCountryClick }) => {
   return (
@@ -6,7 +6,7 @@ const Country = ({ country, handleCountryClick }) => {
       {country.name}{' '}
       <button onClick={() => handleCountryClick(country.name)}>show</button>
     </div>
-  );
-};
+  )
+}
 
-export default Country;
+export default Country

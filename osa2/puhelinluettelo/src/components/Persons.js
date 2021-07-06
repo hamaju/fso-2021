@@ -1,5 +1,5 @@
-import React from 'react';
-import Person from './Person';
+import React from 'react'
+import Person from './Person'
 
 const Persons = ({ persons, filter, handlePersonDelete }) => {
   return (
@@ -14,7 +14,7 @@ const Persons = ({ persons, filter, handlePersonDelete }) => {
           />
         ))}
     </ul>
-  );
-};
+  )
+}
 
-export default Persons;
+export default Persons

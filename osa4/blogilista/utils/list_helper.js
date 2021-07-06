@@ -1,26 +1,26 @@
 // eslint-disable-next-line no-unused-vars
-const dummy = (blogs) => 1;
+const dummy = (blogs) => 1
 
 const totalLikes = (blogs) => {
   const total =
     blogs.length === 0
       ? 0
-      : blogs.reduce((sum, current) => sum + current.likes, 0);
+      : blogs.reduce((sum, current) => sum + current.likes, 0)
 
-  return total;
-};
+  return total
+}
 
 const favoriteBlog = (blogs) => {
   const mostLikedBlog = blogs.reduce((prev, current) =>
     prev.likes > current.likes ? prev : current
-  );
+  )
 
   return {
     title: mostLikedBlog.title,
     author: mostLikedBlog.author,
     likes: mostLikedBlog.likes,
-  };
-};
+  }
+}
 
 const mostBlogs = (blogs) => {
   // convert the array to a map where each key is the author and
@@ -34,13 +34,13 @@ const mostBlogs = (blogs) => {
     ),
     // eslint-disable-next-line no-shadow
     ([author, blogs]) => ({ author, blogs })
-  );
+  )
 
   // find the author with the most blogs
   return blogsByAuthor.reduce((prev, current) =>
     prev.blogs > current.blogs ? prev : current
-  );
-};
+  )
+}
 
 const mostLikes = (blogs) => {
   const likesByAuthor = Array.from(
@@ -49,12 +49,12 @@ const mostLikes = (blogs) => {
       new Map()
     ),
     ([author, likes]) => ({ author, likes })
-  );
+  )
 
   return likesByAuthor.reduce((prev, current) =>
     prev.likes > current.likes ? prev : current
-  );
-};
+  )
+}
 
 module.exports = {
   dummy,
@@ -62,4 +62,4 @@ module.exports = {
   favoriteBlog,
   mostBlogs,
   mostLikes,
-};
+}
