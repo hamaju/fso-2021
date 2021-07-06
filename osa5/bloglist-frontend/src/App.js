@@ -30,7 +30,14 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = (event) => {
+  const notify = (message, type = 'primary') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
+  const addBlog = async (event) => {
     event.preventDefault()
     const blogObject = {
       title: newTitle,
@@ -38,19 +45,13 @@ const App = () => {
       url: newUrl,
     }
 
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog))
-      setNewTitle('')
-      setNewAuthor('')
-      setNewUrl('')
-    })
-  }
-
-  const notify = (message, type = 'primary') => {
-    setNotification({ message, type })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    await blogService.create(blogObject)
+    const returnedBlogs = await blogService.getAll()
+    setBlogs(returnedBlogs)
+    notify(`added ${blogObject.title} by ${blogObject.author}`)
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
   }
 
   const handleLogin = async (event) => {
@@ -74,7 +75,6 @@ const App = () => {
   }
 
   const handleTitleChange = (event) => {
-    console.log(event.target.value)
     setNewTitle(event.target.value)
   }
 
