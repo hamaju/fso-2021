@@ -17,13 +17,13 @@ const create = async (newObject) => {
     headers: { Authorization: token },
   }
 
-  const response = await axios.post(baseUrl, newObject, config)
-  return response.data
+  const res = await axios.post(baseUrl, newObject, config)
+  return res.data
 }
 
 const update = (id, newObject) => {
-  const request = axios.put(`${baseUrl} /${id}`, newObject)
-  return request.then((response) => response.data)
+  const req = axios.put(`${baseUrl} /${id}`, newObject)
+  return req.then((res) => res.data)
 }
 
 const blogService = { getAll, create, update, setToken }
