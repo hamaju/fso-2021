@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import LogoutForm from './components/LogoutForm'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -15,6 +17,15 @@ const App = () => {
     blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs))
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const notify = (message, type = 'primary') => {
     setNotification({ message, type })
     setTimeout(() => {
@@ -26,15 +37,18 @@ const App = () => {
     event.preventDefault()
 
     try {
-      const loginUser = await loginService.login({
+      const user = await loginService.login({
         username,
         password,
       })
-      setUser(loginUser)
+
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+
+      setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      notify('wrong username or password  ', 'error')
+    } catch (e) {
+      notify('wrong username or password', 'error')
     }
   }
 
@@ -46,33 +60,22 @@ const App = () => {
     setPassword(event.target.value)
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedUser')
+  }
+
   if (user === null) {
     return (
       <div>
         <h2>Log in to the application</h2>
         <Notification notification={notification} />
-
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={handleUsernameChange}
-            />
-          </div>
-          <div>
-            password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={handleUsernameChange}
+          handlePasswordChange={handlePasswordChange}
+          handleLogin={handleLogin}
+        />
       </div>
     )
   }
@@ -81,7 +84,8 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
       <Notification notification={notification} />
-      <p>logged in as {user.name}</p>
+      <LogoutForm user={user} handleLogout={handleLogout} />
+      <br></br>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
