@@ -1,28 +1,28 @@
-import React from 'react';
+import React from 'react'
 
 const Header = (props) => {
-  return <h1>{props.course.name}</h1>;
-};
+  return <h1>{props.course.name}</h1>
+}
 
 const Content = (props) => {
   return (
     <>
       <Part name={props.name} exercises={props.exercises} />
     </>
-  );
-};
+  )
+}
 
 const Part = (props) => {
   return (
     <p>
       {props.name} {props.exercises}
     </p>
-  );
-};
+  )
+}
 
 const Total = (props) => {
-  return <p>Number of exercises {props.exercises}</p>;
-};
+  return <p>Number of exercises {props.exercises}</p>
+}
 
 const App = () => {
   const course = {
@@ -41,7 +41,7 @@ const App = () => {
         exercises: 14,
       },
     ],
-  };
+  }
 
   return (
     <>
@@ -66,7 +66,7 @@ const App = () => {
         }
       />
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App

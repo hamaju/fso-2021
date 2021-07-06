@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
-);
+)
 
 const StatisticLine = ({ text, value }) => {
   return (
@@ -10,11 +10,11 @@ const StatisticLine = ({ text, value }) => {
       <td>{text}</td>
       <td>{value}</td>
     </tr>
-  );
-};
+  )
+}
 
 const Statistics = ({ good, neutral, bad, all, average, positive }) => {
-  if (all === 0) return <p>No feedback given</p>;
+  if (all === 0) return <p>No feedback given</p>
 
   return (
     <table>
@@ -27,28 +27,28 @@ const Statistics = ({ good, neutral, bad, all, average, positive }) => {
         <StatisticLine text="positive" value={positive} />
       </tbody>
     </table>
-  );
-};
+  )
+}
 
 const App = () => {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
 
-  const all = good + neutral + bad;
+  const all = good + neutral + bad
   // conditional (ternary) operator
-  const average = all ? (good * 1 + neutral * 0 + bad * -1) / all : 0;
-  const positive = all ? `${(good / all) * 100}%` : '0%';
+  const average = all ? (good * 1 + neutral * 0 + bad * -1) / all : 0
+  const positive = all ? `${(good / all) * 100}%` : '0%'
 
   const handleGoodClick = () => {
-    setGood(good + 1);
-  };
+    setGood(good + 1)
+  }
   const handleNeutralClick = () => {
-    setNeutral(neutral + 1);
-  };
+    setNeutral(neutral + 1)
+  }
   const handleBadClick = () => {
-    setBad(bad + 1);
-  };
+    setBad(bad + 1)
+  }
 
   return (
     <div>
@@ -66,7 +66,7 @@ const App = () => {
         positive={positive}
       />
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
