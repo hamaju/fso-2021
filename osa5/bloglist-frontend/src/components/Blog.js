@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, removeBlog }) => {
   const [detailsVisible, setDetailsVisible] = useState(false)
 
   const blogStyle = {
@@ -20,6 +20,15 @@ const Blog = ({ blog, updateBlog }) => {
     updateBlog(id, updatedBlog)
   }
 
+  const deleteBlog = (event) => {
+    event.preventDefault()
+    const { id } = blog
+    removeBlog(id)
+  }
+
+  const loggedUserJSON = window.localStorage.getItem('loggedUser')
+  const username = JSON.parse(loggedUserJSON).username
+
   return (
     <div style={blogStyle}>
       {blog.title} by {blog.author}{' '}
@@ -38,6 +47,11 @@ const Blog = ({ blog, updateBlog }) => {
           <br></br>
           added by {blog.user.name}
         </div>
+      ) : (
+        ''
+      )}
+      {blog.user.username === username ? (
+        <button onClick={deleteBlog}>remove</button>
       ) : (
         ''
       )}
