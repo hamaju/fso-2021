@@ -42,6 +42,12 @@ const App = () => {
     notify(`added ${blogObject.title} by ${blogObject.author}`)
   }
 
+  const updateBlog = async (id, blogObject) => {
+    await blogService.update(id, blogObject)
+    const returnedBlogs = await blogService.getAll()
+    setBlogs(returnedBlogs)
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -101,7 +107,7 @@ const App = () => {
       </Togglable>
       <br></br>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
       ))}
     </div>
   )
