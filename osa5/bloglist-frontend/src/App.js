@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import LogoutForm from './components/LogoutForm'
@@ -15,8 +15,15 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
 
+  const blogFormRef = useRef()
+
   useEffect(() => {
-    blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs))
+    const getBlogs = async () => {
+      const blogs = await blogService.getAll()
+      setBlogs(blogs)
+    }
+
+    getBlogs()
   }, [])
 
   useEffect(() => {
@@ -36,6 +43,7 @@ const App = () => {
   }
 
   const createBlog = async (blogObject) => {
+    blogFormRef.current.toggleVisibility()
     await blogService.create(blogObject)
     const returnedBlogs = await blogService.getAll()
     setBlogs(returnedBlogs)
@@ -115,7 +123,7 @@ const App = () => {
       <Notification notification={notification} />
       <LogoutForm user={user} handleLogout={handleLogout} />
       <br></br>
-      <Togglable buttonLabel="new blog">
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
         <BlogForm createBlog={createBlog} />
       </Togglable>
       <br></br>
