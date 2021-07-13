@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import BlogForm from './BlogForm'
 
-test('<BlogForm /> calls callback function passed as props with the correct info', () => {
+test('<BlogForm /> calls callback function passed as props with correct info', () => {
   const createBlog = jest.fn()
 
   const component = render(<BlogForm createBlog={createBlog} />)
