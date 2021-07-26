@@ -3,6 +3,7 @@ const initialState = ''
 const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION': {
+      clearTimeout(state.timeout)
       return action.data
     }
     case 'CLEAR_NOTIFICATION':
