@@ -22,6 +22,7 @@ const CreateNew = (props) => {
   }
 
   const handleReset = () => {
+    // unique identifiers for our useField hooks
     clearContentField()
     clearAuthorField()
     clearInfoField()
