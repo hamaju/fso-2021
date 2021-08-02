@@ -1,25 +1,26 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { like } from '../reducers/blogReducer'
-import { deleteBlog } from '../reducers/blogReducer'
+import { likeBlog } from '../reducers/blogReducer'
+import { removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import CommentForm from './CommentForm'
 
-const BlogInfo = ({ user }) => {
-  const dispatch = useDispatch()
-  const history = useHistory()
+const BlogInfo = () => {
+  const user = useSelector((state) => state.login)
 
-  // const user = useSelector((state) => state.user)
   const blogs = useSelector((state) => state.blogs)
-
   const match = useRouteMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
+
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   if (!blog) {
     return null
   }
 
-  const likeBlog = async () => {
+  const handleBlogLike = async () => {
     const { id, author, url, title } = blog
     const updatedBlog = {
       user,
@@ -29,11 +30,11 @@ const BlogInfo = ({ user }) => {
       url,
     }
 
-    dispatch(like(id, updatedBlog))
-    dispatch(setNotification(`liked '${blog.title}'`))
+    dispatch(likeBlog(id, updatedBlog))
+    dispatch(setNotification(`Liked '${blog.title}'`))
   }
 
-  const removeBlog = async () => {
+  const handleBlogRemove = async () => {
     const { id } = blog
 
     if (
@@ -41,26 +42,46 @@ const BlogInfo = ({ user }) => {
         `Are you sure you want to remove ${blog.title} by ${blog.author}?`
       )
     ) {
-      dispatch(deleteBlog(id))
-      dispatch(setNotification(`removed '${blog.title}'`))
+      dispatch(removeBlog(id))
+      dispatch(setNotification(`Removed '${blog.title}'`))
 
       history.push('/')
     }
   }
 
   return (
-    <div>
-      <h2>{blog.title}</h2>
+    <div className="content">
+      <h1 className="title is-3 has-text-weight-bold mt-5">{blog.title}</h1>
+      <h2 className="subtitle is-5 has-text-weight-semibold">
+        by {blog.author}
+      </h2>
       <a href={blog.url}>{blog.url}</a>
-      <p>
-        {blog.likes} likes <button onClick={likeBlog}>like</button>
-      </p>
-      <p>added by {blog.user.name}</p>
-
+      <p>{blog.likes} likes</p>
+      <button className="button is-link" onClick={handleBlogLike}>
+        Like
+      </button>
       {blog.user.username === user?.username ? (
-        <button onClick={removeBlog}>remove</button>
+        <button
+          className="button is-danger is-light ml-3"
+          onClick={handleBlogRemove}
+        >
+          Remove
+        </button>
       ) : (
         ''
+      )}
+      <h3 className="title is-4 has-text-weight-bold">Comments</h3>
+      <CommentForm />
+      {blog.comments.length > 0 ? (
+        blog.comments
+          .map((comment) => (
+            <div className="box" key={comment.id}>
+              {comment.content}
+            </div>
+          ))
+          .reverse()
+      ) : (
+        <p>No comments yet</p>
       )}
     </div>
   )

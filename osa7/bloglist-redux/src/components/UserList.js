@@ -7,13 +7,13 @@ const UserList = () => {
 
   return (
     <div>
-      <h2>Users</h2>
-      <table>
+      <h1 className="title is-3 has-text-weight-bold mt-5">Users</h1>
+      <table className="table is-striped is-bordered">
         <tbody>
           <tr>
             <td></td>
             <td>
-              <strong>blogs added</strong>
+              <strong>Blogs</strong>
             </td>
           </tr>
           {users.map((user) => (

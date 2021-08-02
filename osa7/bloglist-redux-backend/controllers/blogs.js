@@ -3,17 +3,15 @@ const middleware = require('../utils/middleware')
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({}).populate('user', {
-    username: 1,
-    name: 1,
-  })
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { content: 1 })
 
   res.json(blogs.map((blog) => blog.toJSON()))
 })
 
 blogsRouter.post('/', middleware.userExtractor, async (req, res) => {
-  const { body } = req
-  const { user } = req
+  const { body, user } = req
 
   if (!body.title && !body.url) {
     res.sendStatus(400)

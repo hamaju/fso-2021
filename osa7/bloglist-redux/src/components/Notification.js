@@ -8,14 +8,11 @@ const Notification = () => {
     return null
   }
 
-  const style = {
-    border: 'solid',
-    padding: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-  }
-
-  return <div style={style}>{notification.message}</div>
+  return (
+    <div className="notification is-warning has-text-weight-semibold mt-3">
+      {notification.message}
+    </div>
+  )
 }
 
 export default Notification

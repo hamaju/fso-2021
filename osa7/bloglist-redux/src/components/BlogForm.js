@@ -1,22 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import Input from './Input'
+import Togglable from './Togglable'
 
-const BlogForm = ({ user }) => {
+const BlogForm = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const blogFormRef = useRef()
 
   const dispatch = useDispatch()
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    blogFormRef.current.toggleVisibility()
+
     const newBlog = { title, author, url }
 
-    dispatch(createBlog(newBlog, user))
-    dispatch(setNotification(`added '${title}'`))
+    dispatch(createBlog(newBlog))
+    dispatch(setNotification(`Added '${title}'`))
 
     setTitle('')
     setAuthor('')
@@ -36,30 +42,36 @@ const BlogForm = ({ user }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Input
-        label="title"
-        type="text"
-        value={title}
-        name="Title"
-        onChange={handleTitleChange}
-      />
-      <Input
-        label="author"
-        type="text"
-        value={author}
-        name="Author"
-        onChange={handleAuthorChange}
-      />
-      <Input
-        label="url"
-        type="url"
-        value={url}
-        name="URL"
-        onChange={handleUrlChange}
-      />
-      <button type="submit">add</button>
-    </form>
+    <Togglable buttonLabel="New blog" ref={blogFormRef}>
+      <div className="column is-half">
+        <form className="box" onSubmit={handleSubmit}>
+          <Input
+            label="Title"
+            type="text"
+            value={title}
+            name="Title"
+            onChange={handleTitleChange}
+          />
+          <Input
+            label="Author"
+            type="text"
+            value={author}
+            name="Author"
+            onChange={handleAuthorChange}
+          />
+          <Input
+            label="URL"
+            type="url"
+            value={url}
+            name="URL"
+            onChange={handleUrlChange}
+          />
+          <button className="button is-link" type="submit">
+            Add
+          </button>
+        </form>
+      </div>
+    </Togglable>
   )
 }
 

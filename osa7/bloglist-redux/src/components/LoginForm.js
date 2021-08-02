@@ -5,18 +5,18 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useField } from '../hooks'
 
 const LoginForm = () => {
-  const dispatch = useDispatch()
+  const { reset: resetUsernameField, ...username } = useField('text')
+  const { reset: resetPasswordField, ...password } = useField('password')
 
-  const username = useField('text')
-  const password = useField('password')
+  const dispatch = useDispatch()
 
   const loginHelper = async (username, password) => {
     try {
       await dispatch(login(username, password))
-      dispatch(setNotification(`successfully logged in as ${username}`))
+      dispatch(setNotification(`Logged in as ${username}`))
     } catch (err) {
       console.error(err)
-      dispatch(setNotification('wrong username or password'))
+      dispatch(setNotification('Wrong username or password'))
     }
   }
 
@@ -30,20 +30,33 @@ const LoginForm = () => {
     }
   }
 
+  // const resetFields = () => {
+  //   resetUsernameField()
+  //   resetPasswordField()
+  // }
+
   return (
-    <form onSubmit={handleLogin}>
-      username
-      <br />
-      <input {...username} />
-      <br />
-      password
-      <br />
-      <input {...password} />
-      <br />
-      <button id="login-button" type="submit">
-        login
-      </button>
-    </form>
+    <div className="columns is-centered mt-6">
+      <div className="column is-one-third">
+        <div className="content">
+          <h1 className="title has-text-weight-bold">Bloglist app</h1>
+          <p className="has-text-weight-semibold">Log in to continue</p>
+        </div>
+        <form className="box" onSubmit={handleLogin}>
+          <label className="label">Username</label>
+          <input className="input" {...username} />
+          <label className="label">Password</label>
+          <input className="input" {...password} />
+          <button
+            className="button is-link mt-3"
+            id="login-button"
+            type="submit"
+          >
+            Log in
+          </button>
+        </form>
+      </div>
+    </div>
   )
 }
 

@@ -15,7 +15,7 @@ usersRouter.post('/', async (req, res) => {
   if (body.password && body.password.length < 4) {
     return res
       .status(400)
-      .json({ error: 'password needs be at least 3 characters long' })
+      .json({ error: 'password needs to be at least 3 characters long' })
   }
 
   const user = new User({

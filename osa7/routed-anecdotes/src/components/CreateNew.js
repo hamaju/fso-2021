@@ -3,14 +3,16 @@ import { useHistory } from 'react-router'
 import { useField } from '../hooks'
 
 const CreateNew = (props) => {
+  // omit reset properties from the input fields
   const { reset: clearContentField, ...content } = useField('text')
   const { reset: clearAuthorField, ...author } = useField('text')
   const { reset: clearInfoField, ...info } = useField('url')
 
   const history = useHistory()
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = (event) => {
+    event.preventDefault()
+
     props.addNew({
       content: content.value,
       author: author.value,
@@ -22,7 +24,6 @@ const CreateNew = (props) => {
   }
 
   const handleReset = () => {
-    // unique identifiers for our useField hooks
     clearContentField()
     clearAuthorField()
     clearInfoField()
