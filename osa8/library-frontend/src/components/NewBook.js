@@ -18,9 +18,7 @@ const NewBook = ({ show, setError, updateCacheWith }) => {
     },
   })
 
-  if (!show) {
-    return null
-  }
+  if (!show) return null
 
   const submit = async (event) => {
     event.preventDefault()

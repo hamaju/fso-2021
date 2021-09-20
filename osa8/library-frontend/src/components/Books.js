@@ -1,33 +1,36 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useQuery, useLazyQuery } from '@apollo/client'
 
 import { ALL_BOOKS } from '../queries'
 
 const Books = ({ show }) => {
+  const [getBooks, { loading, error, data }] = useLazyQuery(ALL_BOOKS)
+  const books = data?.allBooks
+
   const result = useQuery(ALL_BOOKS)
-  const books = result.data?.allBooks
-  let genres = result.data?.allBooks.flatMap((book) => book.genres)
+  let genres = result.data?.allBooks.map((book) => book.genres).flat()
   genres = [...new Set(genres)]
 
-  const [fetchBooks] = useLazyQuery(ALL_BOOKS)
+  useEffect(() => {
+    getBooks()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  if (!show) {
-    return null
-  }
+  if (!show) return null
 
-  if (result.loading) {
-    return <div>loading...</div>
-  }
+  if (loading) return <div>loading...</div>
+  if (error) return `Error! ${error}`
 
-  const handleClick = (event) => {
-    // const filteredBooks = books.filter((book) =>
-    //   book.genres.includes(event.target.value)
-    // )
-    // console.log(filteredBooks)
+  const handleGenreClick = (event) => {
+    const genre = event.target.value
 
-    fetchBooks({
-      variables: { genre: event.target.value },
+    getBooks({
+      variables: { genre },
     })
+  }
+
+  const handleAllGenresClick = () => {
+    getBooks()
   }
 
   return (
@@ -50,11 +53,11 @@ const Books = ({ show }) => {
         </tbody>
       </table>
       {genres.map((genre) => (
-        <button key={genre} value={genre} onClick={handleClick}>
+        <button key={genre} value={genre} onClick={handleGenreClick}>
           {genre}
         </button>
       ))}
-      <button>all genres</button>
+      <button onClick={handleAllGenresClick}>all genres</button>
     </div>
   )
 }

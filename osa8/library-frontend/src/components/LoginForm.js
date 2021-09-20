@@ -28,13 +28,9 @@ const LoginForm = ({ show, setPage, setError, setToken }) => {
     setPage('authors')
   }
 
-  if (!show) {
-    return null
-  }
+  if (!show) return null
 
-  if (result.loading) {
-    return <div>loading...</div>
-  }
+  if (result.loading) return <div>loading...</div>
 
   return (
     <div>

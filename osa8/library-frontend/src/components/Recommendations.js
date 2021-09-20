@@ -5,17 +5,12 @@ import { ALL_BOOKS, ME } from '../queries'
 const Recommendations = ({ show }) => {
   const user = useQuery(ME)
   const favoriteGenre = user.data?.me.favoriteGenre
-
   const result = useQuery(ALL_BOOKS, { variables: { genre: favoriteGenre } })
   const books = result.data?.allBooks
 
-  if (!show) {
-    return null
-  }
+  if (!show) return null
 
-  if (result.loading) {
-    return <div>loading...</div>
-  }
+  if (result.loading) return <div>loading...</div>
 
   return (
     <div>

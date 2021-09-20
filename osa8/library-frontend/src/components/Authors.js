@@ -23,13 +23,9 @@ const Authors = ({ show, token, setError }) => {
     },
   })
 
-  if (!show) {
-    return null
-  }
+  if (!show) return null
 
-  if (result.loading) {
-    return <div>loading...</div>
-  }
+  if (result.loading) return <div>loading...</div>
 
   const submit = (event) => {
     event.preventDefault()
