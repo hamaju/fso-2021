@@ -6,7 +6,6 @@ const BOOK_DETAILS = gql`
     published
     author {
       name
-      born
     }
     genres
   }
@@ -86,6 +85,5 @@ export const BOOK_ADDED = gql`
       ...BookDetails
     }
   }
-
   ${BOOK_DETAILS}
 `

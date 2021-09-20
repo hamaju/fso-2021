@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription } from '@apollo/client'
 
 import Authors from './components/Authors'
 import Books from './components/Books'
@@ -8,11 +8,33 @@ import Recommendations from './components/Recommendations'
 import LoginForm from './components/LoginForm'
 import Notify from './components/Notify'
 
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
+
 const App = () => {
   const [page, setPage] = useState('authors')
   const [errorMessage, setErrorMessage] = useState(null)
   const [token, setToken] = useState(null)
   const client = useApolloClient()
+
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) => set.map((b) => b.id).includes(object.id)
+
+    const dataInStore = client.readQuery({ query: ALL_BOOKS })
+    if (!includedIn(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: dataInStore.allBooks.concat(addedBook) },
+      })
+    }
+  }
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      notify(`${addedBook.title} added`)
+      updateCacheWith(addedBook)
+    },
+  })
 
   const notify = (message) => {
     setErrorMessage(message)
@@ -62,7 +84,11 @@ const App = () => {
       <Notify errorMessage={errorMessage} />
       <Authors show={page === 'authors'} token={token} setError={notify} />
       <Books show={page === 'books'} />
-      <NewBook show={page === 'add'} setError={notify} />
+      <NewBook
+        show={page === 'add'}
+        setError={notify}
+        updateCacheWith={updateCacheWith}
+      />
       <Recommendations show={page === 'recommendations'} />
     </div>
   )
