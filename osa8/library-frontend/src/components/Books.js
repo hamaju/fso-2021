@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery, useLazyQuery } from '@apollo/client'
 
 import { ALL_BOOKS } from '../queries'
 
 const Books = ({ show }) => {
+  const [genre, setGenre] = useState('')
+
   const [getBooks, { loading, error, data }] = useLazyQuery(ALL_BOOKS)
   const books = data?.allBooks
 
@@ -24,6 +26,8 @@ const Books = ({ show }) => {
   const handleGenreClick = (event) => {
     const genre = event.target.value
 
+    setGenre(genre)
+
     getBooks({
       variables: { genre },
     })
@@ -31,11 +35,18 @@ const Books = ({ show }) => {
 
   const handleAllGenresClick = () => {
     getBooks()
+
+    setGenre('')
   }
 
   return (
     <div>
       <h2>books</h2>
+      {genre !== '' && (
+        <p>
+          in genre <strong>{genre}</strong>
+        </p>
+      )}
       <table>
         <tbody>
           <tr>
