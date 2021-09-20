@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import { useQuery, useMutation } from '@apollo/client'
 import Select from 'react-select'
-
 import { ALL_AUTHORS, UPDATE_AUTHOR } from '../queries'
 
-const Authors = (props) => {
+const Authors = ({ show, token, setError }) => {
   const [born, setBorn] = useState('')
   const [selectedOption, setSelectedOption] = useState(null)
 
@@ -19,9 +18,12 @@ const Authors = (props) => {
 
   const [updateAuthor] = useMutation(UPDATE_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message)
+    },
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -56,23 +58,27 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h2>Set birthyear</h2>
-      <form onSubmit={submit}>
-        <Select
-          defaultValue={selectedOption}
-          onChange={setSelectedOption}
-          options={options}
-        />
+      {token && (
         <div>
-          born
-          <input
-            value={born}
-            type="number"
-            onChange={({ target }) => setBorn(parseInt(target.value))}
-          />
+          <h2>Set birthyear</h2>
+          <form onSubmit={submit}>
+            <Select
+              defaultValue={selectedOption}
+              onChange={setSelectedOption}
+              options={options}
+            />
+            <div>
+              born
+              <input
+                value={born}
+                type="number"
+                onChange={({ target }) => setBorn(parseInt(target.value))}
+              />
+            </div>
+            <button type="submit">update author</button>
+          </form>
         </div>
-        <button type="submit">update author</button>
-      </form>
+      )}
     </div>
   )
 }

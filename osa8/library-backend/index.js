@@ -13,7 +13,6 @@ const Book = require('./models/book')
 const Author = require('./models/author')
 
 const JWT_SECRET = process.env.JWT_SECRET
-
 const MONGODB_URI = process.env.MONGODB_URI
 
 console.log('connecting to', MONGODB_URI)
