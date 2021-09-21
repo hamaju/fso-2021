@@ -24,7 +24,7 @@ const Books = ({ show }) => {
   if (!show) return null
 
   if (loading) return <div>loading...</div>
-  if (error) return `Error! ${error}`
+  if (error) return `${error}`
 
   const handleGenreClick = (event) => {
     const genre = event.target.value

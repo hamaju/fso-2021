@@ -7,8 +7,9 @@ const Authors = ({ show, token, setError }) => {
   const [born, setBorn] = useState('')
   const [selectedOption, setSelectedOption] = useState(null)
 
-  const result = useQuery(ALL_AUTHORS)
-  const authors = result.data?.allAuthors
+  const { loading, error, data } = useQuery(ALL_AUTHORS)
+  
+  const authors = data?.allAuthors
   const options = authors?.map((author) => {
     return {
       value: author.name,
@@ -25,7 +26,8 @@ const Authors = ({ show, token, setError }) => {
 
   if (!show) return null
 
-  if (result.loading) return <div>loading...</div>
+  if (loading) return <div>loading...</div>
+  if (error) return `${error}`
 
   const submit = (event) => {
     event.preventDefault()

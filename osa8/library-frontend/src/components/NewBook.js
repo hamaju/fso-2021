@@ -34,7 +34,6 @@ const NewBook = ({ show, setError, updateCacheWith }) => {
 
   const addGenre = () => {
     setGenres(genres.concat(genre))
-
     setGenre('')
   }
 
