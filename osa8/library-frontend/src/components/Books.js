@@ -6,7 +6,10 @@ import { ALL_BOOKS } from '../queries'
 const Books = ({ show }) => {
   const [genre, setGenre] = useState('')
 
-  const [getBooks, { loading, error, data }] = useLazyQuery(ALL_BOOKS)
+  const [getBooks, { loading, error, data }] = useLazyQuery(ALL_BOOKS, {
+    // don't check cache before making a network request
+    fetchPolicy: 'network-only',
+  })
   const books = data?.allBooks
 
   const result = useQuery(ALL_BOOKS)
@@ -26,11 +29,11 @@ const Books = ({ show }) => {
   const handleGenreClick = (event) => {
     const genre = event.target.value
 
-    setGenre(genre)
-
     getBooks({
       variables: { genre },
     })
+
+    setGenre(genre)
   }
 
   const handleAllGenresClick = () => {
