@@ -18,18 +18,17 @@ const LoginForm = ({ show, setPage, setError, setToken }) => {
       setToken(token)
       localStorage.setItem('library-user-token', token)
     }
-  }, [result.data]) // eslint-disable-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [result.data])
 
   const submit = async (event) => {
     event.preventDefault()
-
     login({ variables: { username, password } })
-
-    setPage('authors')
+    setPage('books')
   }
 
   if (!show) return null
-
+  
   if (result.loading) return <div>loading...</div>
 
   return (

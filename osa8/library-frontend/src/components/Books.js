@@ -28,17 +28,12 @@ const Books = ({ show }) => {
 
   const handleGenreClick = (event) => {
     const genre = event.target.value
-
-    getBooks({
-      variables: { genre },
-    })
-
+    getBooks({ variables: { genre } })
     setGenre(genre)
   }
 
   const handleAllGenresClick = () => {
     getBooks()
-
     setGenre('')
   }
 
@@ -57,11 +52,11 @@ const Books = ({ show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {books.map((author) => (
-            <tr key={author.title}>
-              <td>{author.title}</td>
-              <td>{author.author.name}</td>
-              <td>{author.published}</td>
+          {books.map((book) => (
+            <tr key={book.title}>
+              <td>{book.title}</td>
+              <td>{book.author.name}</td>
+              <td>{book.published}</td>
             </tr>
           ))}
         </tbody>

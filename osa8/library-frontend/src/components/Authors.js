@@ -9,10 +9,10 @@ const Authors = ({ show, token, setError }) => {
 
   const result = useQuery(ALL_AUTHORS)
   const authors = result.data?.allAuthors
-  const options = authors?.map((a) => {
+  const options = authors?.map((author) => {
     return {
-      value: a.name,
-      label: a.name,
+      value: author.name,
+      label: author.name,
     }
   })
 
@@ -29,9 +29,9 @@ const Authors = ({ show, token, setError }) => {
 
   const submit = (event) => {
     event.preventDefault()
-
-    updateAuthor({ variables: { name: selectedOption.value, setBornTo: born } })
-
+    updateAuthor({
+      variables: { name: selectedOption.value, setBornTo: born },
+    })
     setBorn('')
   }
 
@@ -45,11 +45,11 @@ const Authors = ({ show, token, setError }) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors.map((a) => (
-            <tr key={a.name}>
-              <td>{a.name}</td>
-              <td>{a.born}</td>
-              <td>{a.bookCount}</td>
+          {authors.map((author) => (
+            <tr key={author.name}>
+              <td>{author.name}</td>
+              <td>{author.born}</td>
+              <td>{author.bookCount}</td>
             </tr>
           ))}
         </tbody>
