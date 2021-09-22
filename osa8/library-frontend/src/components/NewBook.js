@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/client'
-import { CREATE_BOOK } from '../queries'
+import { useMutation, useLazyQuery } from '@apollo/client'
+import { CREATE_BOOK, ALL_BOOKS } from '../queries'
 
 const NewBook = ({ show, setError, updateCacheWith }) => {
   const [title, setTitle] = useState('')
@@ -9,12 +9,18 @@ const NewBook = ({ show, setError, updateCacheWith }) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
+  // TODO: actually use cache
+  const [getBooks] = useLazyQuery(ALL_BOOKS, {
+    fetchPolicy: 'network-only',
+  })
+
   const [createBook] = useMutation(CREATE_BOOK, {
     onError: (error) => {
       setError(error.graphQLErrors[0].message)
     },
     update: (store, response) => {
       updateCacheWith(response.data.addBook)
+      getBooks()
     },
   })
 
