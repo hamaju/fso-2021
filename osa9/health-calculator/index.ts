@@ -5,6 +5,7 @@ import { bmiCalculator } from './bmiCalculator';
 import { exerciseCalculator } from './exerciseCalculator';
 
 const app = express();
+
 app.use(express.json());
 
 app.get('/hello', (_req, res) => {
