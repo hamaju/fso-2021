@@ -14,7 +14,7 @@ interface Result {
 }
 
 const parseArguments = (args: string[]): ExerciseData => {
-  if (args.length < 4) throw new Error('missing arguments');
+  if (args.length < 4) throw new Error('Missing arguments');
 
   const exerciseData: number[] = args.slice(3).map(Number);
 
@@ -24,21 +24,21 @@ const parseArguments = (args: string[]): ExerciseData => {
       data: [...exerciseData],
     };
   } else {
-    throw new Error('some of the provided values were not numbers!');
+    throw new Error('Provided values were not numbers!');
   }
 };
 
 const exerciseCalculator = (target: number, exerciseData: number[]): Result => {
-  const trainingDays: number[] = exerciseData.filter((d: number) => d > 0);
+  const dailyExercises: number[] = exerciseData.filter((d: number) => d > 0);
   const average: number =
     exerciseData.reduce((a, b) => a + b) / exerciseData.length;
 
   let rating: number;
   let ratingDescription: string;
-  if (average < 1) {
+  if (average < 1.5) {
     rating = 1;
     ratingDescription = 'poor';
-  } else if (average > 1 && average < 2) {
+  } else if (average > 1.5 && average < 2.5) {
     rating = 2;
     ratingDescription = 'good';
   } else {
@@ -48,7 +48,7 @@ const exerciseCalculator = (target: number, exerciseData: number[]): Result => {
 
   const returnObject = {
     periodLength: exerciseData.length,
-    trainingDays: trainingDays.length,
+    trainingDays: dailyExercises.length,
     success: average >= target ? true : false,
     rating,
     ratingDescription,
@@ -63,7 +63,7 @@ try {
   const { target, data } = parseArguments(process.argv);
   console.log(exerciseCalculator(target, data));
 } catch (e) {
-  console.log('Error:', e.message);
+  console.log('Error:', (e as Error).message);
 }
 
-export {};
+export { exerciseCalculator };
