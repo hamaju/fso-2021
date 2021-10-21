@@ -4,16 +4,22 @@ const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
 
+const isDateOfBirth = (date: string): boolean => {
+  return Boolean(Date.parse(date));
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const isGender = (param: any): param is Gender => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  return Object.values(Gender).includes(param);
+};
+
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
     throw new Error('Incorrect or missing name');
   }
 
   return name;
-};
-
-const isDateOfBirth = (date: string): boolean => {
-  return Boolean(Date.parse(date));
 };
 
 const parseDateOfBirth = (dateOfBirth: unknown): string => {
@@ -24,10 +30,12 @@ const parseDateOfBirth = (dateOfBirth: unknown): string => {
   return dateOfBirth;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isGender = (param: any): param is Gender => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-  return Object.values(Gender).includes(param);
+const parseSsn = (ssn: unknown): string => {
+  if (!ssn || !isString(ssn)) {
+    throw new Error('Incorrect or missing SSN');
+  }
+
+  return ssn;
 };
 
 const parseGender = (gender: unknown): Gender => {
@@ -36,14 +44,6 @@ const parseGender = (gender: unknown): Gender => {
   }
 
   return gender;
-};
-
-const parseSsn = (ssn: unknown): string => {
-  if (!ssn || !isString(ssn)) {
-    throw new Error('Incorrect or missing SSN');
-  }
-
-  return ssn;
 };
 
 const parseOccupation = (occupation: unknown): string => {
