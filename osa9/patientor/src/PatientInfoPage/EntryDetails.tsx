@@ -1,32 +1,27 @@
 import React from 'react';
 
 import { Entry } from '../types';
-import { useStateValue } from '../state';
+import { assertNever } from '../utils';
+
+import Hospital from './Hospital';
+import OccupationalHealthcare from './OccupationalHealthcare';
+import HealthCheck from './HealthCheck';
 
 interface EntryDetailsProps {
   entry: Entry;
 }
 
 const EntryDetails = ({ entry }: EntryDetailsProps) => {
-  const [{ diagnoses }] = useStateValue();
-  return (
-    <>
-      <p>
-        {entry.date} <em>{entry.description}</em>
-      </p>
-      <ul>
-        {entry.diagnosisCodes?.map((code) =>
-          diagnoses
-            .filter((diagnosis) => diagnosis.code === code)
-            .map((d) => (
-              <li key={d.code}>
-                {d.code} {d.name}
-              </li>
-            ))
-        )}
-      </ul>
-    </>
-  );
+  switch (entry.type) {
+    case 'Hospital':
+      return <Hospital entry={entry} />;
+    case 'OccupationalHealthcare':
+      return <OccupationalHealthcare entry={entry} />;
+    case 'HealthCheck':
+      return <HealthCheck entry={entry} />;
+    default:
+      return assertNever(entry);
+  }
 };
 
 export default EntryDetails;

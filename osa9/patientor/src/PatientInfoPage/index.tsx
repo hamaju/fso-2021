@@ -40,7 +40,7 @@ const PatientInfoPage = () => {
         </Header>
         <div>ssn: {patient?.ssn}</div>
         <div>occupation: {patient?.occupation}</div>
-        <h3>entries</h3>
+        <Header as="h3">entries</Header>
         {patient?.entries.length !== 0 ? (
           patient?.entries.map((entry: Entry) => (
             <EntryDetails key={entry.id} entry={entry} />
