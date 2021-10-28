@@ -3,9 +3,10 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Container, Header } from 'semantic-ui-react';
 
-import { Patient } from '../types';
+import { Entry, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import GenderIcon from '../components/GenderIcon';
+import EntryDetails from './EntryDetails';
 import { useStateValue, setPatientInfo } from '../state';
 
 const PatientInfoPage = () => {
@@ -14,7 +15,7 @@ const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
 
   React.useEffect(() => {
-    const getPatientInfo = async () => {
+    const fetchPatientInfo = async () => {
       try {
         const { data: patientInfoFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
@@ -26,9 +27,9 @@ const PatientInfoPage = () => {
     };
 
     if (!patient || patient.id !== id) {
-      void getPatientInfo();
+      void fetchPatientInfo();
     }
-  }, [patient, id]);
+  }, [patient, id, dispatch]);
 
   return (
     <div className="App">
@@ -39,6 +40,14 @@ const PatientInfoPage = () => {
         </Header>
         <div>ssn: {patient?.ssn}</div>
         <div>occupation: {patient?.occupation}</div>
+        <h3>entries</h3>
+        {patient?.entries.length !== 0 ? (
+          patient?.entries.map((entry: Entry) => (
+            <EntryDetails key={entry.id} entry={entry} />
+          ))
+        ) : (
+          <p>no entries</p>
+        )}
       </Container>
     </div>
   );
