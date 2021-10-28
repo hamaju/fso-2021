@@ -5,9 +5,9 @@ import { OccupationalHealthcareEntry } from '../types';
 
 import DiagnosisList from './DiagnosisList';
 
-interface OccupationalHealthcareProps {
+type OccupationalHealthcareProps = {
   entry: OccupationalHealthcareEntry;
-}
+};
 
 const OccupationalHealthcare = ({ entry }: OccupationalHealthcareProps) => {
   return (

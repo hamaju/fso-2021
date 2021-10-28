@@ -7,9 +7,9 @@ import Hospital from './Hospital';
 import OccupationalHealthcare from './OccupationalHealthcare';
 import HealthCheck from './HealthCheck';
 
-interface EntryDetailsProps {
+type EntryDetailsProps = {
   entry: Entry;
-}
+};
 
 const EntryDetails = ({ entry }: EntryDetailsProps) => {
   switch (entry.type) {

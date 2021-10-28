@@ -6,9 +6,9 @@ import { HealthCheckEntry } from '../types';
 import DiagnosisList from './DiagnosisList';
 import HealthIcon from '../components/HealthIcon';
 
-interface HealthCheckEntryProps {
+type HealthCheckEntryProps = {
   entry: HealthCheckEntry;
-}
+};
 
 const HealthCheck = ({ entry }: HealthCheckEntryProps) => {
   return (

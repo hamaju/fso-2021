@@ -5,9 +5,9 @@ import { HospitalEntry } from '../types';
 
 import DiagnosisList from './DiagnosisList';
 
-interface HospitalProps {
+type HospitalProps = {
   entry: HospitalEntry;
-}
+};
 
 const Hospital = ({ entry }: HospitalProps) => {
   return (

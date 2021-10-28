@@ -3,9 +3,9 @@ import React from 'react';
 import { Entry } from '../types';
 import { useStateValue } from '../state';
 
-interface DiagnosisListProps {
+type DiagnosisListProps = {
   entry: Entry;
-}
+};
 
 const DiagnosisList = ({ entry }: DiagnosisListProps) => {
   const [{ diagnoses }] = useStateValue();
