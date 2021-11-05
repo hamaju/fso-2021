@@ -4,7 +4,7 @@ import { Header, Segment, Icon } from 'semantic-ui-react';
 import { HealthCheckEntry } from '../types';
 
 import DiagnosisList from './DiagnosisList';
-import HealthIcon from '../components/HealthIcon';
+import HealthCheckRatingIcon from './HealthCheckRatingIcon';
 
 type HealthCheckEntryProps = {
   entry: HealthCheckEntry;
@@ -21,7 +21,7 @@ const HealthCheck = ({ entry }: HealthCheckEntryProps) => {
           <em>{entry.description}</em>
         </p>
         <DiagnosisList entry={entry} />
-        <HealthIcon rating={entry.healthCheckRating} />
+        <HealthCheckRatingIcon rating={entry.healthCheckRating} />
       </Segment>
     </>
   );

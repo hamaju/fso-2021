@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import express from 'express';
 
 import patientService from '../services/patientService';
-import toNewPatientEntry from '../utils';
+import { toNewPatientEntry, toNewEntry } from '../utils';
 
 const router = express.Router();
 
@@ -21,10 +23,23 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const newPatientEntry = toNewPatientEntry(req.body);
-    const addedEntry = patientService.addPatient(newPatientEntry);
-    res.json(addedEntry);
+    const newPatient = toNewPatientEntry(req.body);
+    const addedPatient = patientService.addPatient(newPatient);
+    res.json(addedPatient);
+  } catch (e) {
+    res.status(400).send((e as Error).message);
+  }
+});
+
+router.post('/:id/entries', (req, res) => {
+  try {
+    const patient = patientService.findById(req.params.id);
+    const newEntry = toNewEntry(req.body);
+
+    if (patient && newEntry) {
+      const addedEntry = patientService.addEntry(patient, newEntry);
+      res.json(addedEntry);
+    }
   } catch (e) {
     res.status(400).send((e as Error).message);
   }

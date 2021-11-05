@@ -27,12 +27,12 @@ export interface Patient {
   entries: Entry[];
 }
 
-interface Discharge {
+export interface Discharge {
   date: string;
   criteria?: string;
 }
 
-interface SickLeave {
+export interface SickLeave {
   startDate: string;
   endDate: string;
 }
@@ -64,6 +64,13 @@ export interface HealthCheckEntry extends BaseEntry {
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;
 
 export type NewPatientEntry = Omit<Patient, 'id'>;
+
+export type NewBaseEntry = Omit<BaseEntry, 'id'>;
+
+export type NewEntry =
+  | Omit<HospitalEntry, 'id'>
+  | Omit<OccupationalHealthcareEntry, 'id'>
+  | Omit<HealthCheckEntry, 'id'>;
 
 export type Entry =
   | HospitalEntry

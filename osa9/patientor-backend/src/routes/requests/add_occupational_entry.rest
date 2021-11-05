@@ -1,0 +1,12 @@
+POST http://localhost:3001/api/patients/d2773c6e-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+  "date": "2021-11-23",
+  "description": "uhhhhhhhh",
+  "specialist": "Dr. Watson",
+  "type": "OccupationalHealthcare",
+  "diagnosisCodes": ["J12.82"],
+  "employerName": "HY",
+  "sickLeave": { "startDate": "2021-11-30", "endDate": "2021-12-14"}
+}

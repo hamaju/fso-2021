@@ -3,11 +3,11 @@ import { Icon } from 'semantic-ui-react';
 
 import { HealthCheckRating } from '../types';
 
-type HealthIconProps = {
+type HealthCheckRatingIconProps = {
   rating: HealthCheckRating;
 };
 
-const HealthIcon = ({ rating }: HealthIconProps) => {
+const HealthCheckRatingIcon = ({ rating }: HealthCheckRatingIconProps) => {
   switch (rating) {
     case HealthCheckRating.Healthy:
       return <Icon name="heart" color="green" />;
@@ -22,4 +22,4 @@ const HealthIcon = ({ rating }: HealthIconProps) => {
   }
 };
 
-export default HealthIcon;
+export default HealthCheckRatingIcon;

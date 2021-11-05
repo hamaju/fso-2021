@@ -14,9 +14,9 @@ const DiagnosisList = ({ entry }: DiagnosisListProps) => {
       {entry.diagnosisCodes?.map((code) =>
         diagnoses
           .filter((diagnosis) => diagnosis.code === code)
-          .map((d) => (
-            <li key={d.code}>
-              {d.code} {d.name}
+          .map((diagnosis) => (
+            <li key={diagnosis.code}>
+              {diagnosis.code} {diagnosis.name}
             </li>
           ))
       )}
