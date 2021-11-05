@@ -235,33 +235,29 @@ export const toNewEntry = (object: any): NewEntry => {
     diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes),
   };
 
-  const validEntry = parseEntryType(object);
+  const entry = parseEntryType(object);
 
-  if (!validEntry) {
-    throw new Error('Incorrect entry type');
-  }
-
-  switch (validEntry.type) {
+  switch (entry.type) {
     case 'Hospital':
       return {
         ...newEntry,
         type: 'Hospital',
-        discharge: parseDischarge(validEntry.discharge),
+        discharge: parseDischarge(entry.discharge),
       };
     case 'OccupationalHealthcare':
       return {
         ...newEntry,
         type: 'OccupationalHealthcare',
-        employerName: parseEmployerName(validEntry.employerName),
-        sickLeave: parseSickLeave(validEntry.sickLeave),
+        employerName: parseEmployerName(entry.employerName),
+        sickLeave: parseSickLeave(entry.sickLeave),
       };
     case 'HealthCheck':
       return {
         ...newEntry,
         type: 'HealthCheck',
-        healthCheckRating: parseHealthCheckRating(validEntry.healthCheckRating),
+        healthCheckRating: parseHealthCheckRating(entry.healthCheckRating),
       };
     default:
-      return assertNever(validEntry);
+      return assertNever(entry);
   }
 };
