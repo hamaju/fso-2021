@@ -9,13 +9,14 @@ type DiagnosisListProps = {
 
 const DiagnosisList = ({ entry }: DiagnosisListProps) => {
   const [{ diagnoses }] = useStateValue();
+
   return (
     <ul>
-      {entry.diagnosisCodes?.map((code) =>
+      {entry.diagnosisCodes?.map((code, index) =>
         diagnoses
           .filter((diagnosis) => diagnosis.code === code)
           .map((diagnosis) => (
-            <li key={diagnosis.code}>
+            <li key={index}>
               {diagnosis.code} {diagnosis.name}
             </li>
           ))
