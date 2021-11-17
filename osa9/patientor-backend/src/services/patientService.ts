@@ -3,8 +3,6 @@ import { v1 as uuid } from 'uuid';
 import patients from '../../data/patients';
 import { Patient, PublicPatient, NewPatientEntry, NewEntry } from '../types';
 
-const id = uuid();
-
 const getEntries = (): Patient[] => {
   return patients;
 };
@@ -20,6 +18,8 @@ const getNonSensitiveEntries = (): PublicPatient[] => {
 };
 
 const addPatient = (patient: NewPatientEntry): Patient => {
+  const id = uuid();
+
   const newPatient = {
     id,
     ...patient,
@@ -35,6 +35,8 @@ const findById = (id: string): Patient | undefined => {
 };
 
 const addEntry = (patient: Patient, entry: NewEntry): Patient => {
+  const id = uuid();
+
   const newEntry = {
     id,
     ...entry,
