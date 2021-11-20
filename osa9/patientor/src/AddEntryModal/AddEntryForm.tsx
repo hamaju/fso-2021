@@ -28,12 +28,13 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         description: '',
         date: '',
         specialist: '',
-        healthCheckRating: 2,
+        healthCheckRating: 0,
         diagnosisCodes: [],
       }}
       onSubmit={onSubmit}
       validate={(values) => {
         const requiredError = 'Field is required';
+        const healthCheckError = 'Rating must be between 0 and 3';
         const errors: { [field: string]: string } = {};
         if (!values.description) {
           errors.description = requiredError;
@@ -44,8 +45,8 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         if (!values.specialist) {
           errors.specialist = requiredError;
         }
-        if (!values.healthCheckRating) {
-          errors.healthCheckRating = requiredError;
+        if (values.healthCheckRating < 0 || values.healthCheckRating > 3) {
+          errors.healthCheckRating = healthCheckError;
         }
         return errors;
       }}
