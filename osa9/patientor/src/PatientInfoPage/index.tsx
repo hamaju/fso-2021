@@ -8,8 +8,8 @@ import { apiBaseUrl } from '../constants';
 import GenderIcon from '../components/GenderIcon';
 import EntryDetails from './EntryDetails';
 import AddEntryModal from '../AddEntryModal';
-import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
 import { useStateValue, setPatientInfo, addEntry } from '../state';
+import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
 
 const PatientInfoPage = () => {
   const [{ patient }, dispatch] = useStateValue();

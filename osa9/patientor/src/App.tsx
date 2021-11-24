@@ -35,7 +35,6 @@ const App = () => {
         const { data: diagnosisListFromApi } = await axios.get<Diagnosis[]>(
           `${apiBaseUrl}/diagnosis`
         );
-
         dispatch(setDiagnosisList(diagnosisListFromApi));
       } catch (e) {
         console.error(e);

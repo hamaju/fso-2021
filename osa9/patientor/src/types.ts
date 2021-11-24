@@ -10,6 +10,13 @@ export enum Gender {
   Other = 'other',
 }
 
+export enum EntryType {
+  Default = 'Select an entry type...',
+  Hospital = 'Hospital',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  HealthCheck = 'HealthCheck',
+}
+
 export enum HealthCheckRating {
   'Healthy' = 0,
   'LowRisk' = 1,
