@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, Button, Divider } from 'semantic-ui-react';
 import { Field, Formik, Form } from 'formik';
+import * as yup from 'yup';
 
 import {
   TextField,
@@ -10,6 +11,7 @@ import {
   EntryTypeSelection,
 } from '../AddPatientModal/FormField';
 
+import { parseDateString } from '../utils';
 import { EntryType, Entry } from '../types';
 import { useStateValue } from '../state';
 
@@ -27,6 +29,46 @@ const entryTypeOptions: EntryTypeOption[] = [
   { value: EntryType.HealthCheck, label: 'Health Check' },
 ];
 
+const entrySchema = yup.object().shape({
+  type: yup.string().required('Field is required'),
+  description: yup.string().required('Field is required'),
+  date: yup
+    .date()
+    .transform(parseDateString)
+    .required('Field is required')
+    .typeError('Invalid date'),
+  specialist: yup.string().required('Field is required'),
+  diagnosisCodes: yup.array().of(yup.string()),
+  discharge: yup.object().shape(
+    {
+      date: yup
+        .date()
+        .transform(parseDateString)
+        .typeError('Invalid date')
+        .when('criteria', {
+          is: (criteria: string) => criteria?.length > 0,
+          then: yup
+            .date()
+            .transform(parseDateString)
+            .required('Field is required')
+            .typeError('Invalid date'),
+        }),
+      criteria: yup.string(),
+    },
+    [['date', 'criteria']]
+  ),
+  employerName: yup.string(),
+  sickLeave: yup.object({
+    startDate: yup.date().transform(parseDateString).typeError('Invalid date'),
+    endDate: yup
+      .date()
+      .transform(parseDateString)
+      .typeError('Invalid date')
+      .min(yup.ref('startDate'), 'End date cannot be before start date'),
+  }),
+  healthCheckRating: yup.number().min(0).max(3),
+});
+
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
 
@@ -42,42 +84,8 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         sickLeave: { startDate: '', endDate: '' },
         healthCheckRating: 0,
       }}
+      validationSchema={entrySchema}
       onSubmit={onSubmit}
-      validate={(values) => {
-        const requiredError = 'Field is required';
-        const errors: { [field: string]: string } = {};
-        if (!values.description) {
-          errors.description = requiredError;
-        }
-        if (!values.date) {
-          errors.date = requiredError;
-        }
-        if (!values.specialist) {
-          errors.specialist = requiredError;
-        }
-        if (values.healthCheckRating < 0 || values.healthCheckRating > 3) {
-          errors.healthCheckRating = 'Rating must be between 0 and 3';
-        }
-        if (
-          (values.discharge.date && !values.discharge.criteria) ||
-          (!values.discharge.date && values.discharge.criteria)
-        ) {
-          errors.discharge = requiredError;
-        }
-        if (
-          (values.sickLeave.startDate && !values.sickLeave.endDate) ||
-          (!values.sickLeave.startDate && values.sickLeave.endDate)
-        ) {
-          errors.sickLeave = requiredError;
-        }
-        if (values.employerName && !values.sickLeave.startDate) {
-          errors.sickLeave = requiredError;
-        }
-        if (values.employerName && !values.sickLeave.endDate) {
-          errors.sickLeave = requiredError;
-        }
-        return errors;
-      }}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
         return (

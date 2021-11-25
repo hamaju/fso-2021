@@ -22,10 +22,7 @@ const Hospital = ({ entry }: HospitalProps) => {
         <DiagnosisList entry={entry} />
         {entry.discharge && (
           <>
-            <Header as="h3">Discharge</Header>
-            <Header as="h4">
-              <strong>{entry.discharge.date}</strong>
-            </Header>
+            Discharge on <strong>{entry.discharge.date}</strong>
             <p style={{ color: 'gray' }}>
               <em>{entry.discharge.criteria}</em>
             </p>

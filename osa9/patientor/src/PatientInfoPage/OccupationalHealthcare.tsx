@@ -22,9 +22,8 @@ const OccupationalHealthcare = ({ entry }: OccupationalHealthcareProps) => {
         <DiagnosisList entry={entry} />
         {entry.sickLeave && (
           <>
-            <Header as="h3">Sick leave</Header>
             <p>
-              From <strong>{entry.sickLeave.startDate}</strong> to{' '}
+              Sick leave from <strong>{entry.sickLeave.startDate}</strong> to{' '}
               <strong>{entry.sickLeave.endDate}</strong>
             </p>
           </>
