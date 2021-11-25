@@ -31,7 +31,7 @@ const isHealthCheckRating = (param: any): param is HealthCheckRating => {
 
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
-    throw new Error('Incorrect or missing name');
+    throw new Error('Invalid or missing name');
   }
 
   return name;
@@ -39,7 +39,7 @@ const parseName = (name: unknown): string => {
 
 const parseDateOfBirth = (dateOfBirth: unknown): string => {
   if (!dateOfBirth || !isString(dateOfBirth) || !isDate(dateOfBirth)) {
-    throw new Error('Incorrect or missing date of birth: ' + dateOfBirth);
+    throw new Error('Invalid or missing date of birth: ' + dateOfBirth);
   }
 
   return dateOfBirth;
@@ -47,7 +47,7 @@ const parseDateOfBirth = (dateOfBirth: unknown): string => {
 
 const parseSsn = (ssn: unknown): string => {
   if (!ssn || !isString(ssn)) {
-    throw new Error('Incorrect or missing SSN');
+    throw new Error('Invalid or missing SSN');
   }
 
   return ssn;
@@ -55,7 +55,7 @@ const parseSsn = (ssn: unknown): string => {
 
 const parseGender = (gender: unknown): Gender => {
   if (!gender || !isGender(gender)) {
-    throw new Error('Incorrect or missing gender: ' + gender);
+    throw new Error('Invalid or missing gender: ' + gender);
   }
 
   return gender;
@@ -63,7 +63,7 @@ const parseGender = (gender: unknown): Gender => {
 
 const parseOccupation = (occupation: unknown): string => {
   if (!occupation || !isString(occupation)) {
-    throw new Error('Incorrect or missing occupation');
+    throw new Error('Invalid or missing occupation');
   }
 
   return occupation;
@@ -71,7 +71,7 @@ const parseOccupation = (occupation: unknown): string => {
 
 const parseDescription = (description: unknown): string => {
   if (!description || !isString(description)) {
-    throw new Error('Incorrect or missing description');
+    throw new Error('Invalid or missing description');
   }
 
   return description;
@@ -79,7 +79,7 @@ const parseDescription = (description: unknown): string => {
 
 const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
-    throw new Error('Incorrect or missing date: ' + date);
+    throw new Error('Invalid or missing date: ' + date);
   }
 
   return date;
@@ -87,7 +87,7 @@ const parseDate = (date: unknown): string => {
 
 const parseSpecialist = (specialist: unknown): string => {
   if (!specialist || !isString(specialist)) {
-    throw new Error('Incorrect or missing specialist');
+    throw new Error('Invalid or missing specialist');
   }
 
   return specialist;
@@ -99,11 +99,11 @@ const parseDiagnosisCodes = (codes: any): Array<Diagnosis['code']> => {
   }
 
   if (!Array.isArray(codes)) {
-    throw new Error('Incorrect diagnosis code(s)');
+    throw new Error('Invalid diagnosis code(s)');
   }
 
   if (!codes.every((code: unknown) => isString(code))) {
-    throw new Error('Incorrect diagnosis code(s)');
+    throw new Error('Invalid diagnosis code(s)');
   }
 
   return codes;
@@ -127,15 +127,15 @@ const isEntryType = (entry: any): entry is NewEntry => {
 
 const parseEntryType = (type: unknown): NewEntry => {
   if (!type || !isEntryType(type)) {
-    throw new Error('Incorrect or missing entry type');
+    throw new Error('Invalid or missing entry type');
   }
 
   return type;
 };
 
 const parseCriteria = (criteria: unknown): string => {
-  if (!criteria || !isString(criteria)) {
-    throw new Error('Incorrect or missing criteria');
+  if (!isString(criteria)) {
+    throw new Error('Invalid criteria');
   }
 
   return criteria;
@@ -143,15 +143,11 @@ const parseCriteria = (criteria: unknown): string => {
 
 const parseDischarge = (discharge: any): Discharge => {
   if (!discharge) {
-    throw new Error('Incorrect or missing discharge info');
+    throw new Error('Invalid or missing discharge info');
   }
 
   if (!discharge.date) {
-    throw new Error('Incorrect or missing discharge date');
-  }
-
-  if (!discharge.criteria) {
-    throw new Error('Incorrect or missing discharge criteria');
+    throw new Error('Invalid or missing discharge date');
   }
 
   const date = parseDate(discharge.date);
@@ -167,7 +163,7 @@ const parseDischarge = (discharge: any): Discharge => {
 
 const parseEmployerName = (employer: unknown): string => {
   if (!employer || !isString(employer)) {
-    throw new Error('Incorrect or missing employer');
+    throw new Error('Invalid or missing employer');
   }
 
   return employer;
@@ -175,15 +171,15 @@ const parseEmployerName = (employer: unknown): string => {
 
 const parseSickLeave = (sickLeave: any): SickLeave => {
   if (!sickLeave) {
-    throw new Error('Incorrect or missing sick leave date');
+    throw new Error('Invalid or missing sick leave date');
   }
 
   if (!sickLeave.startDate) {
-    throw new Error('Incorrect or missing sick leave start date');
+    throw new Error('Invalid or missing sick leave start date');
   }
 
   if (!sickLeave.endDate) {
-    throw new Error('Incorrect or missing sick leave end date');
+    throw new Error('Invalid or missing sick leave end date');
   }
 
   const startDate = parseDate(sickLeave.startDate);
@@ -199,7 +195,7 @@ const parseSickLeave = (sickLeave: any): SickLeave => {
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
   if (!isHealthCheckRating(rating)) {
-    throw new Error('Incorrect or missing health check rating');
+    throw new Error('Invalid or missing health check rating');
   }
 
   return rating;
