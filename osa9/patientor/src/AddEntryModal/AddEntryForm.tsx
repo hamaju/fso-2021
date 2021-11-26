@@ -29,7 +29,7 @@ const entryTypeOptions: EntryTypeOption[] = [
   { value: EntryType.HealthCheck, label: 'Health Check' },
 ];
 
-const entrySchema = yup.object().shape({
+const validationSchema = yup.object().shape({
   type: yup.string().required('Field is required'),
   description: yup.string().required('Field is required'),
   date: yup
@@ -71,7 +71,6 @@ const entrySchema = yup.object().shape({
 
 const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [{ diagnoses }] = useStateValue();
-
   return (
     <Formik
       initialValues={{
@@ -84,7 +83,7 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         sickLeave: { startDate: '', endDate: '' },
         healthCheckRating: 0,
       }}
-      validationSchema={entrySchema}
+      validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
       {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
