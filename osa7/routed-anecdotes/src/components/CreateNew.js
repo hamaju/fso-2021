@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router'
 import { useField } from '../hooks'
 
 const CreateNew = (props) => {
@@ -8,7 +8,7 @@ const CreateNew = (props) => {
   const { reset: clearAuthorField, ...author } = useField('text')
   const { reset: clearInfoField, ...info } = useField('url')
 
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -20,7 +20,7 @@ const CreateNew = (props) => {
       votes: 0,
     })
 
-    history.push('/')
+    navigate('/')
   }
 
   const handleReset = () => {
