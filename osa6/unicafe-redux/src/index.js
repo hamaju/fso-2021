@@ -1,9 +1,9 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
-import reducer from './reducer'
+import { createRoot } from 'react-dom/client'
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from './counterReducer'
 
-const store = createStore(reducer)
+const store = configureStore({ reducer: counterReducer })
 
 const App = () => {
   const good = () => {
@@ -43,8 +43,9 @@ const App = () => {
   )
 }
 
+const root = createRoot(document.getElementById('root'))
 const renderApp = () => {
-  ReactDOM.render(<App />, document.getElementById('root'))
+  root.render(<App />)
 }
 
 renderApp()
