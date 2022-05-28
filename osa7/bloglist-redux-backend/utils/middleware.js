@@ -10,54 +10,54 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-const unknownEndpoint = (req, res) => {
-  res.status(404).send({ error: 'unknown endpoint' })
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
 }
 
-const errorHandler = (err, req, res, next) => {
-  logger.error(err.message)
+const errorHandler = (error, request, response, next) => {
+  logger.error(error.message)
 
-  if (err.name === 'CastError') {
-    return res.status(400).send({ error: 'malformatted id' })
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
   }
-  if (err.name === 'ValidationError') {
-    return res.status(400).json({ error: err.message })
+  if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
-  if (err.name === 'JsonWebTokenError') {
-    return res.status(401).json({
+  if (error.name === 'JsonWebTokenError') {
+    return response.status(401).json({
       error: 'invalid token',
     })
   }
-  if (err.name === 'TokenExpiredError') {
-    return res.status(401).json({
+  if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({
       error: 'token expired',
     })
   }
 
-  next(err)
+  next(error)
 }
 
-const tokenExtractor = (req, res, next) => {
-  const authorization = req.get('authorization')
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    req.token = authorization.substring(7)
+    request.token = authorization.substring(7)
   } else {
-    req.token = null
+    request.token = null
   }
 
   next()
-  return req.token
+  return request.token
 }
 
-const userExtractor = async (req, res, next) => {
-  const decodedToken = jwt.verify(req.token, process.env.SECRET)
-  if (!req.token || !decodedToken.id) {
-    return res.status(401).json({ error: 'token missing or invalid' })
+const userExtractor = async (request, response, next) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
   }
-  req.user = await User.findById(decodedToken.id)
+  request.user = await User.findById(decodedToken.id)
 
   next()
-  return req.user
+  return request.user
 }
 
 module.exports = {

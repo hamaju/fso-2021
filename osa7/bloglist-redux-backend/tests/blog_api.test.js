@@ -27,8 +27,8 @@ describe('when there is some initial blogs saved', () => {
   })
 
   test('the correct number of blogs is returned as json', async () => {
-    const res = await api.get('/api/blogs')
-    expect(res.body).toHaveLength(helper.initialBlogs.length)
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
 
     await api
       .get('/api/blogs')
@@ -37,8 +37,8 @@ describe('when there is some initial blogs saved', () => {
   })
 
   test('blogs are returned with the field id', async () => {
-    const res = await api.get('/api/blogs')
-    const ids = res.body.map((r) => r.id)
+    const response = await api.get('/api/blogs')
+    const ids = response.body.map((r) => r.id)
     expect(ids).toBeDefined()
   })
 

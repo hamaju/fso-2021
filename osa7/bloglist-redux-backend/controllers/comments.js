@@ -2,21 +2,21 @@ const commentsRouter = require('express').Router()
 const Comment = require('../models/comment')
 const Blog = require('../models/blog')
 
-commentsRouter.get('/:id/comments', async (req, res) => {
-  const { id } = req.params
+commentsRouter.get('/:id/comments', async (request, response) => {
+  const { id } = request.params
   const blog = await Blog.findById(id).populate('comments')
 
-  res.json(blog)
+  response.json(blog)
 })
 
-commentsRouter.post('/:id/comments', async (req, res) => {
-  const { body } = req
-  const { id } = req.params
+commentsRouter.post('/:id/comments', async (request, response) => {
+  const { body } = request
+  const { id } = request.params
 
   const blog = await Blog.findById(id)
 
   if (!body.content) {
-    res.sendStatus(400)
+    response.sendStatus(400)
   }
 
   const comment = new Comment({
@@ -27,7 +27,7 @@ commentsRouter.post('/:id/comments', async (req, res) => {
   blog.comments = blog.comments.concat(savedComment._id)
   await blog.save()
 
-  res.json(savedComment.toJSON())
+  response.json(savedComment.toJSON())
 })
 
 module.exports = commentsRouter
