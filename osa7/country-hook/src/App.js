@@ -22,14 +22,14 @@ const useCountry = (name) => {
     const getData = async () => {
       try {
         if (name) {
-          const res = await axios(
-            `https://restcountries.eu/rest/v2/name/${name}?fullText=true`
+          const response = await axios(
+            `https://restcountries.com/v2/name/${name}?fullText=true`
           )
-          const data = res.data[0]
+          const data = response.data[0]
           setCountry({ data, found: true })
         }
-      } catch (err) {
-        console.error(err)
+      } catch (error) {
+        console.error(error)
         setCountry({ found: false })
       }
     }
@@ -46,14 +46,14 @@ const Country = ({ country }) => {
   }
 
   if (!country.found) {
-    return <div>not found...</div>
+    return <div>not found</div>
   }
 
   return (
     <div>
       <h3>{country.data.name} </h3>
-      <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div>
+      <div>capital: {country.data.capital} </div>
+      <div>population: {country.data.population}</div>
       <img
         src={country.data.flag}
         height="100"
@@ -68,14 +68,14 @@ const App = () => {
   const [name, setName] = useState('')
   const country = useCountry(name)
 
-  const fetch = (e) => {
-    e.preventDefault()
+  const fetchCountry = (event) => {
+    event.preventDefault()
     setName(nameInput.value)
   }
 
   return (
     <div>
-      <form onSubmit={fetch}>
+      <form onSubmit={fetchCountry}>
         <input {...nameInput} />
         <button>find</button>
       </form>
