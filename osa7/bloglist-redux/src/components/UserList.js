@@ -6,7 +6,7 @@ const UserList = () => {
   const users = useSelector((state) => state.users)
 
   return (
-    <div>
+    <div className="container">
       <h1 className="title is-3 has-text-weight-bold mt-5">Users</h1>
       <table className="table is-striped is-bordered">
         <tbody>

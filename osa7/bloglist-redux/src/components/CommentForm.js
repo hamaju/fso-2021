@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useRouteMatch } from 'react-router-dom'
+import { useMatch } from 'react-router-dom'
 import { useField } from '../hooks'
 import { commentBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
@@ -9,7 +9,7 @@ const CommentForm = () => {
   const { reset, ...comment } = useField('text')
 
   const blogs = useSelector((state) => state.blogs)
-  const match = useRouteMatch('/blogs/:id')
+  const match = useMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   const dispatch = useDispatch()

@@ -1,10 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useRouteMatch, Link } from 'react-router-dom'
+import { useMatch, Link } from 'react-router-dom'
 
 const User = () => {
   const users = useSelector((state) => state.users)
-  const match = useRouteMatch('/users/:id')
+  const match = useMatch('/users/:id')
   const user = match ? users.find((user) => user.id === match.params.id) : null
 
   if (!user) {
@@ -12,7 +12,7 @@ const User = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1 className="title is-3 has-text-weight-bold mt-5">{user.name}</h1>
       <h2 className="title is-5 has-text-weight-semibold">Added blogs</h2>
       {user.blogs.length > 0 ? (
