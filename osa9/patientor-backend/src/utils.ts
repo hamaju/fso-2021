@@ -11,10 +11,10 @@ import {
   NewBaseEntry,
   SickLeave,
   HealthCheckRating,
-} from './types';
+} from "./types";
 
 const isString = (text: unknown): text is string => {
-  return typeof text === 'string' || text instanceof String;
+  return typeof text === "string" || text instanceof String;
 };
 
 const isDate = (date: string): boolean => {
@@ -31,7 +31,7 @@ const isHealthCheckRating = (param: any): param is HealthCheckRating => {
 
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
-    throw new Error('Invalid or missing name');
+    throw new Error("Invalid or missing name");
   }
 
   return name;
@@ -39,7 +39,7 @@ const parseName = (name: unknown): string => {
 
 const parseDateOfBirth = (dateOfBirth: unknown): string => {
   if (!dateOfBirth || !isString(dateOfBirth) || !isDate(dateOfBirth)) {
-    throw new Error('Invalid or missing date of birth: ' + dateOfBirth);
+    throw new Error("Invalid or missing date of birth: " + dateOfBirth);
   }
 
   return dateOfBirth;
@@ -47,7 +47,7 @@ const parseDateOfBirth = (dateOfBirth: unknown): string => {
 
 const parseSsn = (ssn: unknown): string => {
   if (!ssn || !isString(ssn)) {
-    throw new Error('Invalid or missing SSN');
+    throw new Error("Invalid or missing SSN");
   }
 
   return ssn;
@@ -55,7 +55,7 @@ const parseSsn = (ssn: unknown): string => {
 
 const parseGender = (gender: unknown): Gender => {
   if (!gender || !isGender(gender)) {
-    throw new Error('Invalid or missing gender: ' + gender);
+    throw new Error("Invalid or missing gender: " + gender);
   }
 
   return gender;
@@ -63,7 +63,7 @@ const parseGender = (gender: unknown): Gender => {
 
 const parseOccupation = (occupation: unknown): string => {
   if (!occupation || !isString(occupation)) {
-    throw new Error('Invalid or missing occupation');
+    throw new Error("Invalid or missing occupation");
   }
 
   return occupation;
@@ -71,7 +71,7 @@ const parseOccupation = (occupation: unknown): string => {
 
 const parseDescription = (description: unknown): string => {
   if (!description || !isString(description)) {
-    throw new Error('Invalid or missing description');
+    throw new Error("Invalid or missing description");
   }
 
   return description;
@@ -79,7 +79,7 @@ const parseDescription = (description: unknown): string => {
 
 const parseDate = (date: unknown): string => {
   if (!date || !isString(date) || !isDate(date)) {
-    throw new Error('Invalid or missing date: ' + date);
+    throw new Error("Invalid or missing date: " + date);
   }
 
   return date;
@@ -87,38 +87,38 @@ const parseDate = (date: unknown): string => {
 
 const parseSpecialist = (specialist: unknown): string => {
   if (!specialist || !isString(specialist)) {
-    throw new Error('Invalid or missing specialist');
+    throw new Error("Invalid or missing specialist");
   }
 
   return specialist;
 };
 
-const parseDiagnosisCodes = (codes: any): Array<Diagnosis['code']> => {
+const parseDiagnosisCodes = (codes: any): Array<Diagnosis["code"]> => {
   if (!codes) {
     return codes;
   }
 
   if (!Array.isArray(codes)) {
-    throw new Error('Invalid diagnosis code(s)');
+    throw new Error("Invalid diagnosis code(s)");
   }
 
   if (!codes.every((code: unknown) => isString(code))) {
-    throw new Error('Invalid diagnosis code(s)');
+    throw new Error("Invalid diagnosis code(s)");
   }
 
   return codes;
 };
 
 const isEntryType = (entry: any): entry is NewEntry => {
-  if (entry.type === 'Hospital') {
+  if (entry.type === "Hospital") {
     return entry.type;
   }
 
-  if (entry.type === 'OccupationalHealthcare') {
+  if (entry.type === "OccupationalHealthcare") {
     return entry.type;
   }
 
-  if (entry.type === 'HealthCheck') {
+  if (entry.type === "HealthCheck") {
     return entry.type;
   }
 
@@ -127,7 +127,7 @@ const isEntryType = (entry: any): entry is NewEntry => {
 
 const parseEntryType = (type: unknown): NewEntry => {
   if (!type || !isEntryType(type)) {
-    throw new Error('Invalid or missing entry type');
+    throw new Error("Invalid or missing entry type");
   }
 
   return type;
@@ -135,7 +135,7 @@ const parseEntryType = (type: unknown): NewEntry => {
 
 const parseCriteria = (criteria: unknown): string => {
   if (!isString(criteria)) {
-    throw new Error('Invalid criteria');
+    throw new Error("Invalid criteria");
   }
 
   return criteria;
@@ -143,11 +143,11 @@ const parseCriteria = (criteria: unknown): string => {
 
 const parseDischarge = (discharge: any): Discharge => {
   if (!discharge) {
-    throw new Error('Invalid or missing discharge info');
+    throw new Error("Invalid or missing discharge info");
   }
 
   if (!discharge.date) {
-    throw new Error('Invalid or missing discharge date');
+    throw new Error("Invalid or missing discharge date");
   }
 
   const date = parseDate(discharge.date);
@@ -163,7 +163,7 @@ const parseDischarge = (discharge: any): Discharge => {
 
 const parseEmployerName = (employer: unknown): string => {
   if (!employer || !isString(employer)) {
-    throw new Error('Invalid or missing employer');
+    throw new Error("Invalid or missing employer");
   }
 
   return employer;
@@ -171,15 +171,15 @@ const parseEmployerName = (employer: unknown): string => {
 
 const parseSickLeave = (sickLeave: any): SickLeave => {
   if (!sickLeave) {
-    throw new Error('Invalid or missing sick leave date');
+    throw new Error("Invalid or missing sick leave date");
   }
 
   if (!sickLeave.startDate) {
-    throw new Error('Invalid or missing sick leave start date');
+    throw new Error("Invalid or missing sick leave start date");
   }
 
   if (!sickLeave.endDate) {
-    throw new Error('Invalid or missing sick leave end date');
+    throw new Error("Invalid or missing sick leave end date");
   }
 
   const startDate = parseDate(sickLeave.startDate);
@@ -195,7 +195,7 @@ const parseSickLeave = (sickLeave: any): SickLeave => {
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
   if (!isHealthCheckRating(rating)) {
-    throw new Error('Invalid or missing health check rating');
+    throw new Error("Invalid or missing health check rating");
   }
 
   return rating;
@@ -234,23 +234,23 @@ export const toNewEntry = (object: any): NewEntry => {
   const entry = parseEntryType(object);
 
   switch (entry.type) {
-    case 'Hospital':
+    case "Hospital":
       return {
         ...newEntry,
-        type: 'Hospital',
+        type: "Hospital",
         discharge: parseDischarge(entry.discharge),
       };
-    case 'OccupationalHealthcare':
+    case "OccupationalHealthcare":
       return {
         ...newEntry,
-        type: 'OccupationalHealthcare',
+        type: "OccupationalHealthcare",
         employerName: parseEmployerName(entry.employerName),
         sickLeave: parseSickLeave(entry.sickLeave),
       };
-    case 'HealthCheck':
+    case "HealthCheck":
       return {
         ...newEntry,
-        type: 'HealthCheck',
+        type: "HealthCheck",
         healthCheckRating: parseHealthCheckRating(entry.healthCheckRating),
       };
     default:
