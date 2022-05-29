@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import { Entry } from '../types';
-import { useStateValue } from '../state';
+import { Entry } from "../types";
+import { useStateValue } from "../state";
 
 type DiagnosisListProps = {
   entry: Entry;

@@ -1,15 +1,15 @@
-import React from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { Button, Container, Header } from 'semantic-ui-react';
+import React from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { Button, Container, Header } from "semantic-ui-react";
 
-import { Entry, Patient } from '../types';
-import { apiBaseUrl } from '../constants';
-import GenderIcon from '../components/GenderIcon';
-import EntryDetails from './EntryDetails';
-import AddEntryModal from '../AddEntryModal';
-import { useStateValue, setPatientInfo, addEntry } from '../state';
-import { EntryFormValues } from '../AddEntryModal/AddEntryForm';
+import { Entry, Patient } from "../types";
+import { apiBaseUrl } from "../constants";
+import GenderIcon from "../components/GenderIcon";
+import EntryDetails from "./EntryDetails";
+import AddEntryModal from "../AddEntryModal";
+import { useStateValue, setPatientInfo, addEntry } from "../state";
+import { EntryFormValues } from "../AddEntryModal/AddEntryForm";
 
 const PatientInfoPage = () => {
   const [{ patient }, dispatch] = useStateValue();
@@ -52,8 +52,8 @@ const PatientInfoPage = () => {
       dispatch(addEntry(newEntry));
       closeModal();
     } catch (e) {
-      console.error(e.response?.data || 'Unknown Error');
-      setError(e.response?.data?.error || 'Unknown Error');
+      console.error(e.response?.data || "Unknown Error");
+      setError(e.response?.data?.error || "Unknown Error");
     }
   };
 

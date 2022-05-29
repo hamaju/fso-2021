@@ -1,14 +1,14 @@
-import React from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { Container, Table, Button } from 'semantic-ui-react';
+import React from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { Container, Table, Button } from "semantic-ui-react";
 
-import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
-import AddPatientModal from '../AddPatientModal';
-import { Patient } from '../types';
-import { apiBaseUrl } from '../constants';
-import HealthRatingBar from '../components/HealthRatingBar';
-import { useStateValue, addPatient } from '../state';
+import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
+import AddPatientModal from "../AddPatientModal";
+import { Patient } from "../types";
+import { apiBaseUrl } from "../constants";
+import HealthRatingBar from "../components/HealthRatingBar";
+import { useStateValue, addPatient } from "../state";
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -32,8 +32,8 @@ const PatientListPage = () => {
       dispatch(addPatient(newPatient));
       closeModal();
     } catch (e) {
-      console.error(e.response?.data || 'Unknown Error');
-      setError(e.response?.data?.error || 'Unknown Error');
+      console.error(e.response?.data || "Unknown Error");
+      setError(e.response?.data?.error || "Unknown Error");
     }
   };
 

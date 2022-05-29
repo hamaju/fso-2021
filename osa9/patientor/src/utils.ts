@@ -1,4 +1,4 @@
-import { parse, isDate } from 'date-fns';
+import { parse, isDate } from "date-fns";
 
 /**
  * Helper function for exhaustive type checking
@@ -12,7 +12,7 @@ const assertNever = (value: never): never => {
 function parseDateString(value: string, originalValue: string) {
   const parsedDate = isDate(originalValue)
     ? originalValue
-    : parse(originalValue, 'yyyy-MM-dd', new Date());
+    : parse(originalValue, "yyyy-MM-dd", new Date());
 
   return parsedDate;
 }

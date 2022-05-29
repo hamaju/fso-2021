@@ -1,7 +1,7 @@
-import React from 'react';
-import { Icon, Popup } from 'semantic-ui-react';
+import React from "react";
+import { Icon, Popup } from "semantic-ui-react";
 
-import { HealthCheckRating } from '../types';
+import { HealthCheckRating } from "../types";
 
 type HealthRatingIconProps = {
   rating: HealthCheckRating;

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Grid, Button, Divider } from 'semantic-ui-react';
-import { Field, Formik, Form } from 'formik';
-import * as yup from 'yup';
+import React from "react";
+import { Grid, Button, Divider } from "semantic-ui-react";
+import { Field, Formik, Form } from "formik";
+import * as yup from "yup";
 
 import {
   TextField,
@@ -9,13 +9,13 @@ import {
   DiagnosisSelection,
   EntryTypeOption,
   EntryTypeSelection,
-} from '../AddPatientModal/FormField';
+} from "../AddPatientModal/FormField";
 
-import { parseDateString } from '../utils';
-import { EntryType, Entry } from '../types';
-import { useStateValue } from '../state';
+import { parseDateString } from "../utils";
+import { EntryType, Entry } from "../types";
+import { useStateValue } from "../state";
 
-export type EntryFormValues = Omit<Entry, 'id' | 'type'>;
+export type EntryFormValues = Omit<Entry, "id" | "type">;
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -23,48 +23,48 @@ interface Props {
 }
 
 const entryTypeOptions: EntryTypeOption[] = [
-  { value: EntryType.Default, label: 'Select an entry type...' },
-  { value: EntryType.Hospital, label: 'Hospital' },
-  { value: EntryType.OccupationalHealthcare, label: 'Occupational Healthcare' },
-  { value: EntryType.HealthCheck, label: 'Health Check' },
+  { value: EntryType.Default, label: "Select an entry type..." },
+  { value: EntryType.Hospital, label: "Hospital" },
+  { value: EntryType.OccupationalHealthcare, label: "Occupational Healthcare" },
+  { value: EntryType.HealthCheck, label: "Health Check" },
 ];
 
 const validationSchema = yup.object().shape({
-  type: yup.string().required('Field is required'),
-  description: yup.string().required('Field is required'),
+  type: yup.string().required("Field is required"),
+  description: yup.string().required("Field is required"),
   date: yup
     .date()
     .transform(parseDateString)
-    .required('Field is required')
-    .typeError('Invalid date'),
-  specialist: yup.string().required('Field is required'),
+    .required("Field is required")
+    .typeError("Invalid date"),
+  specialist: yup.string().required("Field is required"),
   diagnosisCodes: yup.array().of(yup.string()),
   discharge: yup.object().shape(
     {
       date: yup
         .date()
         .transform(parseDateString)
-        .typeError('Invalid date')
-        .when('criteria', {
+        .typeError("Invalid date")
+        .when("criteria", {
           is: (criteria: string) => criteria?.length > 0,
           then: yup
             .date()
             .transform(parseDateString)
-            .required('Field is required')
-            .typeError('Invalid date'),
+            .required("Field is required")
+            .typeError("Invalid date"),
         }),
       criteria: yup.string(),
     },
-    [['date', 'criteria']]
+    [["date", "criteria"]]
   ),
   employerName: yup.string(),
   sickLeave: yup.object({
-    startDate: yup.date().transform(parseDateString).typeError('Invalid date'),
+    startDate: yup.date().transform(parseDateString).typeError("Invalid date"),
     endDate: yup
       .date()
       .transform(parseDateString)
-      .typeError('Invalid date')
-      .min(yup.ref('startDate'), 'End date cannot be before start date'),
+      .typeError("Invalid date")
+      .min(yup.ref("startDate"), "End date cannot be before start date"),
   }),
   healthCheckRating: yup.number().min(0).max(3),
 });
@@ -74,13 +74,13 @@ const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
   return (
     <Formik
       initialValues={{
-        description: '',
-        date: '',
-        specialist: '',
+        description: "",
+        date: "",
+        specialist: "",
         diagnosisCodes: [],
-        discharge: { date: '', criteria: '' },
-        employerName: '',
-        sickLeave: { startDate: '', endDate: '' },
+        discharge: { date: "", criteria: "" },
+        employerName: "",
+        sickLeave: { startDate: "", endDate: "" },
         healthCheckRating: 0,
       }}
       validationSchema={validationSchema}

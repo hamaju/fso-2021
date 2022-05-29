@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import { Entry } from '../types';
-import { assertNever } from '../utils';
+import { Entry } from "../types";
+import { assertNever } from "../utils";
 
-import Hospital from './Hospital';
-import OccupationalHealthcare from './OccupationalHealthcare';
-import HealthCheck from './HealthCheck';
+import Hospital from "./Hospital";
+import OccupationalHealthcare from "./OccupationalHealthcare";
+import HealthCheck from "./HealthCheck";
 
 type EntryDetailsProps = {
   entry: Entry;
@@ -13,11 +13,11 @@ type EntryDetailsProps = {
 
 const EntryDetails = ({ entry }: EntryDetailsProps) => {
   switch (entry.type) {
-    case 'Hospital':
+    case "Hospital":
       return <Hospital entry={entry} />;
-    case 'OccupationalHealthcare':
+    case "OccupationalHealthcare":
       return <OccupationalHealthcare entry={entry} />;
-    case 'HealthCheck':
+    case "HealthCheck":
       return <HealthCheck entry={entry} />;
     default:
       return assertNever(entry);
