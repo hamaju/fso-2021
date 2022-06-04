@@ -98,7 +98,7 @@ const patients: Patient[] = [
     dateOfBirth: "1971-04-09",
     ssn: "090471-8890",
     gender: Gender.Male,
-    occupation: "Digital evangelist",
+    occupation: "Digital Evangelist",
     entries: [
       {
         id: "54a8746e-34c4-4cf4-bf72-bfecd039be9a",
