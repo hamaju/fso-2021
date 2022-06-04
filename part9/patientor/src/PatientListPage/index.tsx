@@ -14,7 +14,7 @@ const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string | undefined>();
+  const [error, setError] = React.useState<string>();
 
   const openModal = (): void => setModalOpen(true);
 
@@ -31,9 +31,16 @@ const PatientListPage = () => {
       );
       dispatch(addPatient(newPatient));
       closeModal();
-    } catch (e) {
-      console.error(e.response?.data || "Unknown Error");
-      setError(e.response?.data?.error || "Unknown Error");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || "Unrecognized Axios error");
+        setError(
+          String(e?.response?.data?.error) || "Unrecognized Axios error"
+        );
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
     }
   };
 

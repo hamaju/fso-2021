@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Button, Divider, Header, Container } from "semantic-ui-react";
 
 import { apiBaseUrl } from "./constants";
@@ -52,14 +52,10 @@ const App = () => {
             Home
           </Button>
           <Divider hidden />
-          <Switch>
-            <Route path="/api/patients/:id">
-              <PatientInfoPage />
-            </Route>
-            <Route path="/">
-              <PatientListPage />
-            </Route>
-          </Switch>
+          <Routes>
+            <Route path="/api/patients/:id" element={<PatientInfoPage />} />
+            <Route path="/" element={<PatientListPage />} />
+          </Routes>
         </Container>
       </Router>
     </div>

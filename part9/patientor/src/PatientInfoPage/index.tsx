@@ -17,7 +17,7 @@ const PatientInfoPage = () => {
   const { id } = useParams<{ id: string }>();
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string | undefined>();
+  const [error, setError] = React.useState<string>();
 
   const openModal = (): void => setModalOpen(true);
 
@@ -28,6 +28,8 @@ const PatientInfoPage = () => {
 
   React.useEffect(() => {
     const fetchPatientInfo = async () => {
+      if (!id) return;
+
       try {
         const { data: patientInfoFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
@@ -44,6 +46,8 @@ const PatientInfoPage = () => {
   }, [patient, id, dispatch]);
 
   const submitNewEntry = async (values: EntryFormValues) => {
+    if (!id) return;
+
     try {
       const { data: newEntry } = await axios.post<Patient>(
         `${apiBaseUrl}/patients/${id}/entries`,
@@ -51,9 +55,16 @@ const PatientInfoPage = () => {
       );
       dispatch(addEntry(newEntry));
       closeModal();
-    } catch (e) {
-      console.error(e.response?.data || "Unknown Error");
-      setError(e.response?.data?.error || "Unknown Error");
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e?.response?.data || "Unrecognized Axios error");
+        setError(
+          String(e?.response?.data?.error) || "Unrecognized Axios error"
+        );
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
     }
   };
 
